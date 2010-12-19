@@ -35,7 +35,9 @@ public class Main extends Activity {
         super.onStart();
         CCDirector.sharedDirector().setScreenSize(SUPPOSED_WIN_WIDTH, SUPPOSED_WIN_HEIGHT); 
         // attach the OpenGL view to a window
+
         CCDirector.sharedDirector().attachInView(mGLSurfaceView);
+
 
         // no effect here because device orientation is controlled by manifest
         CCDirector.sharedDirector().setDeviceOrientation(CCDirector.kCCDeviceOrientationPortrait);

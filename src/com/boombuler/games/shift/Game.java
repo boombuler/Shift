@@ -34,9 +34,11 @@ public class Game {
 		void BlockRemoved(int row, int col);
 	}
 	
+	public interface ScoreChangedListener {
+		void OnScoreChanged(int lastMove, long totalScore);
+	}
 	
-	private BlockChangeListener mListener; 
-	
+
 	public enum Difficulty {
 		Easy,
 		Normal
@@ -60,7 +62,11 @@ public class Game {
 		
 	private GameState mState = null;
 	private final Random mRandom = new Random();
-		
+	private ScoreChangedListener mScoreListener;
+	private BlockChangeListener mBlockListener; 
+	
+	
+	
 	private Game() {
 		// initialize default GameState
 		setDifficulty(Difficulty.Easy);
@@ -93,8 +99,8 @@ public class Game {
 	
 	private void setNewBlock(int row, int col, byte type) {
 		mState.Board[row][col] = type;
-		if (mListener != null) 
-			mListener.BlockAdded(row, col, type);
+		if (mBlockListener != null) 
+			mBlockListener.BlockAdded(row, col, type);
 	}
 	
 	private byte getValidRandomBlockForPos(int row, int col) {
@@ -150,8 +156,8 @@ public class Game {
 		}
 		
 		FillMissingCache();
-		if (mListener != null) {
-			mListener.EndMoving();
+		if (mBlockListener != null) {
+			mBlockListener.EndMoving();
 		}
 		
 	}
@@ -182,10 +188,22 @@ public class Game {
 		}
 
 		for (Point p : allDestroyed) {
-			if (mListener != null)
-				mListener.BlockRemoved(p.y, p.x);
+			if (mBlockListener != null)
+				mBlockListener.BlockRemoved(p.y, p.x);
 			mState.Board[p.y][p.x] = BLOCK_TYPE_FREE;	
 		}
+		int score = allDestroyed.size();		
+		if (score > 0) {
+			mState.Bonus++;
+			score = mState.Bonus * score;
+			mState.LastMoveScore = score;
+			mState.TotalScore += score;			
+		} else {
+			mState.LastMoveScore = 0;
+			mState.Bonus = 0;
+		}
+		if (mScoreListener != null)
+			mScoreListener.OnScoreChanged(mState.LastMoveScore, mState.TotalScore);
 	}
 	
 	private void PopulateDestroyList(List<Point> lst,List<Point> allDestroyed, Point fromPoint, byte testtype) {
@@ -209,8 +227,7 @@ public class Game {
 			}
 		}
 	}
-	
-	
+		
 	private boolean IsGameOver() {
 		for(int row = BOARD_CACHE_SIZE; row < BOARD_SIZE + BOARD_CACHE_SIZE; row++) {
 			for(int col = BOARD_CACHE_SIZE; col < BOARD_SIZE + BOARD_CACHE_SIZE; col++) {
@@ -226,22 +243,26 @@ public class Game {
 			return false;
 		mState.Board[rowNew][colNew] = mState.Board[rowOld][colOld];
 		mState.Board[rowOld][colOld] = BLOCK_TYPE_FREE;
-		if (mListener != null)
-			mListener.BlockMoved(rowOld, colOld, rowNew, colNew);
+		if (mBlockListener != null)
+			mBlockListener.BlockMoved(rowOld, colOld, rowNew, colNew);
 		return true;
 	}
 	
 	public void setBlockChangedListener(BlockChangeListener listener) {
-		mListener = listener;
-		if (mListener != null) {
+		mBlockListener = listener;
+		if (mBlockListener != null) {
 			for (int row = 0; row < BOARD_SIZE_WITH_CACHE; row++) {
 				for (int col = 0; col < BOARD_SIZE_WITH_CACHE; col++) {
 					byte typ = mState.Board[row][col];
 					if (typ != BLOCK_TYPE_FREE)
-						mListener.BlockAdded(row, col, typ);
+						mBlockListener.BlockAdded(row, col, typ);
 				}
 			}
 		}		
+	}
+	
+	public void setScoreChangedListener(ScoreChangedListener listener) {
+		mScoreListener = listener;
 	}
 	
 }

@@ -1,5 +1,6 @@
 package com.boombuler.games.shift;
 
+import org.cocos2d.actions.instant.CCCallFunc;
 import org.cocos2d.layers.CCLayer;
 import org.cocos2d.layers.CCScene;
 import org.cocos2d.nodes.CCDirector;
@@ -8,6 +9,7 @@ import org.cocos2d.types.CGSize;
 
 import com.boombuler.games.shift.render.Block;
 
+import android.graphics.PointF;
 import android.view.MotionEvent;
 
 public class Board extends CCLayer implements Game.BlockChangeListener {
@@ -29,16 +31,42 @@ public class Board extends CCLayer implements Game.BlockChangeListener {
 		this.setIsTouchEnabled(true);
 	}
 
+	private PointF mTouchStart = null;
+	
+	@Override
+	public boolean ccTouchesBegan(MotionEvent event) {
+		// TODO Auto-generated method stub
+		mTouchStart = new PointF(event.getX(), event.getY());
+		return super.ccTouchesBegan(event);
+	}
+	
+	@Override
+	public boolean ccTouchesCancelled(MotionEvent event) {
+		mTouchStart = null;
+		return super.ccTouchesCancelled(event);
+	}
+	
+	public float getTouchDistance(MotionEvent ev) {
+		float wid = Math.abs(ev.getX() - mTouchStart.x);
+		float hei = Math.abs(ev.getY() - mTouchStart.y);
+		
+		return (float)Math.sqrt(Math.pow(wid, 2) + Math.pow(hei, 2));
+	}
+	
 	@Override
 	public boolean ccTouchesEnded(MotionEvent event) {
 		if (!IsAnimating()) {
-			float posX = event.getX();
-			float posY = event.getY();
-	
 			CGSize winSize = CCDirector.sharedDirector().winSize();
-			posX = posX - (winSize.width / 2);
-			posY = posY - (winSize.height / 2);
-			
+			final double screenDiag = Math.sqrt((winSize.height* winSize.height)+(winSize.width*winSize.width));
+			final float posX;
+			final float posY;
+			if (getTouchDistance(event) > (screenDiag / 4)) {
+				posX = event.getX() - mTouchStart.x;
+				posY = event.getY() - mTouchStart.y;	
+			} else {
+				posX = event.getX() - (winSize.width / 2);
+				posY = event.getY() - (winSize.height / 2);				
+			}
 			if (Math.abs(posX) > Math.abs(posY)) {
 				if (posX > 0)
 					Game.Current().Move(Game.MoveDirection.Right);
@@ -87,6 +115,14 @@ public class Board extends CCLayer implements Game.BlockChangeListener {
 	public void BlockRemoved(int row, int col) {
 		Block b = FindBlock(row, col);
 		if (b != null) {
+			CCCallFunc cf = CCCallFunc.action(this, "removeNullBlocks");
+			b.FadeOut(cf);
+		}
+	}
+	
+	public void removeNullBlocks() {
+		Block b = null;
+		while((b = FindBlock(0, 0)) != null) {
 			children_.remove(b);
 		}
 	}

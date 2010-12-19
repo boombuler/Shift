@@ -1,6 +1,7 @@
 package com.boombuler.games.shift.render;
 
 import org.cocos2d.actions.instant.CCCallFunc;
+import org.cocos2d.actions.interval.CCFadeOut;
 import org.cocos2d.actions.interval.CCMoveTo;
 import org.cocos2d.actions.interval.CCSequence;
 import org.cocos2d.nodes.CCSprite;
@@ -43,7 +44,15 @@ public class Block extends CCSprite{
 		return CGPoint.ccp(col * BLOCK_SIZE, Main.SUPPOSED_WIN_HEIGHT -(row*BLOCK_SIZE));	
 	}
 	
-	
+	public void FadeOut(CCCallFunc onComplete) {
+		mCol = 0;
+		mRow = 0;
+		CCFadeOut fo = CCFadeOut.action(Board.ANIMATION_TIME);
+		if (onComplete != null)
+			this.runAction(CCSequence.actions(fo, onComplete));
+		else 
+			this.runAction(fo);
+	}
 	
 	public void MoveTo(int row, int col) {
 		if (row != mRow || col != mCol) {

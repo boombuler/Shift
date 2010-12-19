@@ -2,7 +2,9 @@ package com.boombuler.games.shift;
 
 public class GameState {
 
-	
+	public int Bonus = 0;
+	public long TotalScore = 0;
+	public int LastMoveScore = 0;
 	public final Game.Difficulty Difficulty;
 	public byte[][] Board;
 	

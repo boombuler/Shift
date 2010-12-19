@@ -1,7 +1,6 @@
 package com.boombuler.games.shift;
 
-import org.cocos2d.nodes.Director;
-import org.cocos2d.nodes.Scene;
+import org.cocos2d.nodes.CCDirector;
 import org.cocos2d.opengl.CCGLSurfaceView;
 
 import android.app.Activity;
@@ -13,11 +12,14 @@ public class Main extends Activity {
 	
 	private CCGLSurfaceView mGLSurfaceView;
 	
+	public static final float SUPPOSED_WIN_WIDTH  = 320; 
+	public static final float SUPPOSED_WIN_HEIGHT = 480;
 	
     /** Called when the activity is first created. */
     @Override
     public void onCreate(Bundle savedInstanceState) {
     	super.onCreate(savedInstanceState);
+    	MyResources.setContext(this);
     	// set the window status, no tile, full screen and don't sleep
     	requestWindowFeature(Window.FEATURE_NO_TITLE);
     	getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
@@ -25,51 +27,49 @@ public class Main extends Activity {
     	getWindow().setFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON,
     	WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
     	mGLSurfaceView = new CCGLSurfaceView(this);
-    	setContentView(mGLSurfaceView);    	
-
+    	setContentView(mGLSurfaceView);
     }
     
     @Override
     public void onStart() {
         super.onStart();
-        
+        CCDirector.sharedDirector().setScreenSize(SUPPOSED_WIN_WIDTH, SUPPOSED_WIN_HEIGHT); 
         // attach the OpenGL view to a window
-        Director.sharedDirector().attachInView(mGLSurfaceView);
+        CCDirector.sharedDirector().attachInView(mGLSurfaceView);
 
         // no effect here because device orientation is controlled by manifest
-        Director.sharedDirector().setDeviceOrientation(Director.CCDeviceOrientationPortrait);
+        CCDirector.sharedDirector().setDeviceOrientation(CCDirector.kCCDeviceOrientationPortrait);
 
         // show FPS
         // set false to disable FPS display, but don't delete fps_images.png!!
-        Director.sharedDirector().setDisplayFPS(true);
+        CCDirector.sharedDirector().setDisplayFPS(true);
 
         // frames per second
-        Director.sharedDirector().setAnimationInterval(1.0f / 60);
+        CCDirector.sharedDirector().setAnimationInterval(1.0f / 60);
 
-        Scene scene = TestScene.scene();
         // Make the Scene active
-        Director.sharedDirector().runWithScene(scene);
+        CCDirector.sharedDirector().runWithScene(Board.scene());
     }
 
     @Override
     public void onPause() {
         super.onPause();
 
-        Director.sharedDirector().pause();
+        CCDirector.sharedDirector().pause();
     }
 
     @Override
     public void onResume() {
         super.onResume();
 
-        Director.sharedDirector().resume();
+        CCDirector.sharedDirector().resume();
     }
 
     @Override
     public void onStop() {
         super.onStop();
 
-        Director.sharedDirector().end();
+        CCDirector.sharedDirector().end();
     }
     
 }

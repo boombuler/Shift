@@ -9,11 +9,12 @@ import org.cocos2d.types.CGPoint;
 
 import com.boombuler.games.shift.Board;
 import com.boombuler.games.shift.Game;
-import com.boombuler.games.shift.Main;
 
 public class Block extends CCSprite{
 
-	private static float BLOCK_SIZE = 48f;
+	public static float REAL_BLOCK_SIZE = 48f;
+	public static float BLOCK_SIZE = 32f;
+	public static float SCALE = BLOCK_SIZE / REAL_BLOCK_SIZE;
 	
 	private int mRow, mCol, mNextRow, mNextCol;
 	private boolean mAnimating = false;
@@ -22,6 +23,8 @@ public class Block extends CCSprite{
 		super(getFile(type));
 		mRow = row;
 		mCol = col;
+		setScale(SCALE);
+		setAnchorPoint(0f, 0f);
 		setPosition(posToPoint(mRow, mCol));
 	}
 	
@@ -41,7 +44,7 @@ public class Block extends CCSprite{
 	}
 	
 	private CGPoint posToPoint(int row, int col) {
-		return CGPoint.ccp(col * BLOCK_SIZE, Main.SUPPOSED_WIN_HEIGHT -(row*BLOCK_SIZE));	
+		return CGPoint.ccp(col * BLOCK_SIZE, row * BLOCK_SIZE);	
 	}
 	
 	public void FadeOut(CCCallFunc onComplete) {

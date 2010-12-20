@@ -5,30 +5,39 @@ import org.cocos2d.layers.CCLayer;
 import org.cocos2d.layers.CCScene;
 import org.cocos2d.nodes.CCDirector;
 import org.cocos2d.nodes.CCNode;
+import org.cocos2d.types.CGPoint;
 import org.cocos2d.types.CGSize;
 
+import com.boombuler.games.shift.render.Background;
 import com.boombuler.games.shift.render.Block;
+import com.boombuler.games.shift.render.ScoreLabel;
 
 import android.graphics.PointF;
 import android.view.MotionEvent;
 
 public class Board extends CCLayer implements Game.BlockChangeListener {
 
-	public static final float ANIMATION_TIME = 0.5f;
+	public static final float ANIMATION_TIME = 0.3f;
 	private static CCScene fCurrent = null;
 	
 	public static CCScene scene() {
 		if (fCurrent == null) {
 			fCurrent = CCScene.node();
+			fCurrent.addChild(new Background());
 			fCurrent.addChild(new Board());
+			fCurrent.addChild(new ScoreLabel());			
 		}
 		return fCurrent;
 	}
-	
-	
+		
 	public Board() {
 		Game.Current().setBlockChangedListener(this);
 		this.setIsTouchEnabled(true);
+		setScale(Main.SCALE);
+		setAnchorPoint(0f, 0f);
+		CGSize s = CCDirector.sharedDirector().winSize();
+		float boardSize = Game.BOARD_SIZE_WITH_CACHE * Block.BLOCK_SIZE * Main.SCALE;
+		setPosition(CGPoint.make((s.width - boardSize) / 2, (s.height - boardSize) / 2));
 	}
 
 	private PointF mTouchStart = null;
@@ -74,11 +83,12 @@ public class Board extends CCLayer implements Game.BlockChangeListener {
 					Game.Current().Move(Game.MoveDirection.Left);
 			} else {
 				if (posY > 0)
-					Game.Current().Move(Game.MoveDirection.Down);
-				else
 					Game.Current().Move(Game.MoveDirection.Up);
+				else
+					Game.Current().Move(Game.MoveDirection.Down);
 			}
 		}
+		mTouchStart = null;
 		return super.ccTouchesEnded(event);
 	}
 

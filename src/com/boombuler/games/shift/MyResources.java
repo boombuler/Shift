@@ -20,6 +20,10 @@ public class MyResources {
 		return mResources.getString(resourceId);
 	}
 	
+	public static String[] stringArray(int resourceId) {
+		return mResources.getStringArray(resourceId);
+	}
+	
 	public static CCSprite sprite(int resourceId) {
 		Bitmap myBitmap = BitmapFactory.decodeResource(mResources, resourceId);
 		

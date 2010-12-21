@@ -2,5 +2,17 @@
 <resources>
     <string name="app_name">Shift</string>
     <string name="score">Score: %1$d (%2$d)</string>
-    
+    <string-array name="helpscreen">    
+    	<item>Click Left, Right, Up or</item> 
+    	<item>Down to have the free</item>
+    	<item>Blocks move in that direction.</item>
+    	<item> </item>
+		<item>If you form groups</item>
+		<item>of 3 or more blocks,</item>
+		<item>they will be removed,</item>
+		<item>giving you more space</item>
+		<item>to move the blocks further.</item>
+		<item> </item>
+		<item>Good Luck!</item>
+	</string-array>
 </resources>

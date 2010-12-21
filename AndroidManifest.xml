@@ -14,5 +14,5 @@
 
     </application>
     <uses-sdk android:minSdkVersion="4" />
-
+	<uses-feature android:name="android.hardware.touchscreen" />
 </manifest> 

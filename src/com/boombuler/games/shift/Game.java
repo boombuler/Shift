@@ -11,9 +11,9 @@ public class Game {
 
 	private final int MIN_DESTROY_COUNT = 3;
 	public static final int BOARD_SIZE = 6;
-	public static final int BOARD_CACHE_SIZE = 2;
+	public static final int BOARD_CACHE_SIZE = 1;
 	public static final int BOARD_SIZE_WITH_CACHE = BOARD_SIZE + 2 * BOARD_CACHE_SIZE;
-	private static final int[] CACHE_INDEXES = new int[] {1, 8, 0, 9 };	
+	private static final int[] CACHE_INDEXES = new int[] { 7, 0 };
 	
 	
 	public static final byte BLOCK_COLOR_COUNT_EASY = 4;
@@ -69,15 +69,19 @@ public class Game {
 	
 	private Game() {
 		// initialize default GameState
-		setDifficulty(Difficulty.Easy);
+		setDifficulty(Difficulty.Normal);
 	}
 		
 	public void setDifficulty(Difficulty difficulty) {
 		mState = new GameState(difficulty);
+		if (mScoreListener != null)
+			mScoreListener.OnScoreChanged(0, 0);
 		InitNewBoard();
 	}
 	
 	private void InitNewBoard() {
+		if (mBlockListener != null)
+			mBlockListener.Cleared();
 		FillMissingCache();
 		Move(MoveDirection.Up);
 		Move(MoveDirection.Down);
@@ -120,7 +124,7 @@ public class Game {
 				continue;
 			// Check Right
 			if (col < BOARD_CACHE_SIZE-1 && mState.Board[row][col+1] == rndV)
-				continue;
+				continue;			
 
 			return rndV;
 		}
@@ -130,7 +134,7 @@ public class Game {
 		
 		boolean anyMoved = false;
 		if (direction.equals(MoveDirection.Down)) {
-			for(int row = BOARD_SIZE + BOARD_CACHE_SIZE; row >= 0; row--) {
+			for(int row = BOARD_SIZE; row >= 0; row--) {
 				for(int col = BOARD_CACHE_SIZE; col < BOARD_SIZE + BOARD_CACHE_SIZE; col++) {
 					anyMoved |= DoMoveBlock(row, col, row+1, col);
 				}
@@ -148,7 +152,7 @@ public class Game {
 				}
 			}
 		} else if (direction.equals(MoveDirection.Right)) {
-			for(int col = BOARD_SIZE + BOARD_CACHE_SIZE; col >= 0; col--) {
+			for(int col = BOARD_SIZE; col >= 0; col--) {
 				for(int row = BOARD_CACHE_SIZE; row < BOARD_SIZE + BOARD_CACHE_SIZE; row++) {
 					anyMoved |= DoMoveBlock(row, col, row, col+1);
 				}
@@ -164,8 +168,10 @@ public class Game {
 	
 	public void AnimationsComplete() {
 		CheckDestroyBlocks();
-		if (IsGameOver())
+		if (IsGameOver()) {
 			Log.d("BOOMBULER", "GAME OVER");
+			setDifficulty(Difficulty.Normal);
+		}
 	}
 	
 	private void CheckDestroyBlocks() {
@@ -197,13 +203,13 @@ public class Game {
 			mState.Bonus++;
 			score = mState.Bonus * score;
 			mState.LastMoveScore = score;
-			mState.TotalScore += score;			
+			mState.TotalScore += score;
+			if (mScoreListener != null)
+				mScoreListener.OnScoreChanged(mState.LastMoveScore, mState.TotalScore);
 		} else {
 			mState.LastMoveScore = 0;
 			mState.Bonus = 0;
-		}
-		if (mScoreListener != null)
-			mScoreListener.OnScoreChanged(mState.LastMoveScore, mState.TotalScore);
+		}		
 	}
 	
 	private void PopulateDestroyList(List<Point> lst,List<Point> allDestroyed, Point fromPoint, byte testtype) {
@@ -263,6 +269,9 @@ public class Game {
 	
 	public void setScoreChangedListener(ScoreChangedListener listener) {
 		mScoreListener = listener;
+		if (mScoreListener != null) {
+			mScoreListener.OnScoreChanged(mState.LastMoveScore, mState.TotalScore);
+		}
 	}
 	
 }

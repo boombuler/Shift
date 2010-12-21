@@ -20,7 +20,14 @@ public class Board extends CCLayer implements Game.BlockChangeListener {
 	public static final float ANIMATION_TIME = 0.3f;
 	private static CCScene fCurrent = null;
 	
-	public static CCScene scene() {
+	public static void GoToBoard() {
+		if (Settings.Current().getHasReadManual())
+			CCDirector.sharedDirector().runWithScene(Board.scene());
+		else
+			CCDirector.sharedDirector().runWithScene(HelpScreen.scene(Board.scene()));
+	}
+	
+	private static CCScene scene() {
 		if (fCurrent == null) {
 			fCurrent = CCScene.node();
 			fCurrent.addChild(new Background());

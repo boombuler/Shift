@@ -23,9 +23,16 @@ public class Block extends CCSprite{
 		super(getFile(type));
 		mRow = row;
 		mCol = col;
+		checkVisible(row, col);
 		setScale(SCALE);
 		setAnchorPoint(0f, 0f);
 		setPosition(posToPoint(mRow, mCol));
+	}
+	
+	private void checkVisible(int row, int col) {
+		this.setVisible(row > 0 && col > 0 && 
+				row < Game.BOARD_SIZE_WITH_CACHE - Game.BOARD_CACHE_SIZE &&
+				col < Game.BOARD_SIZE_WITH_CACHE - Game.BOARD_CACHE_SIZE);
 	}
 	
 	private static String getFile(byte type) {
@@ -61,6 +68,7 @@ public class Block extends CCSprite{
 		if (row != mRow || col != mCol) {
 			mNextCol = col;
 			mNextRow = row;
+			checkVisible(row, col);
 			CCMoveTo by = CCMoveTo.action(Board.ANIMATION_TIME, posToPoint(row, col));
 			CCCallFunc update = CCCallFunc.action(this, "updatePosition");
 			mAnimating = true;		
@@ -70,7 +78,7 @@ public class Block extends CCSprite{
 	
 	public void updatePosition() {
 		mCol = mNextCol;
-		mRow = mNextRow;
+		mRow = mNextRow;		
 		mAnimating = false;
 	}
 		

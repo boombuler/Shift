@@ -66,7 +66,7 @@ public class Main extends Activity {
         super.onStart(); 
         // frames per second
         CCDirector.sharedDirector().setAnimationInterval(1.0f / 60);
-        CCDirector.sharedDirector().runWithScene(Board.scene());
+        Board.GoToBoard();
     }
 
     @Override

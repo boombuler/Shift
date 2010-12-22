@@ -41,7 +41,6 @@ public class Board extends CCLayer implements Game.BlockChangeListener {
 	}
 		
 	public Board() {
-		Game.Current().setBlockChangedListener(this);
 		this.setIsTouchEnabled(true);
 		setScale(Main.SCALE);
 		setAnchorPoint(0f, 0f);

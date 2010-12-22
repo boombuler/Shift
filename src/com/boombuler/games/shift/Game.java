@@ -4,8 +4,11 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Random;
 
+import org.cocos2d.layers.CCScene;
+import org.cocos2d.nodes.CCDirector;
+import org.cocos2d.transitions.CCTransitionScene;
+
 import android.graphics.Point;
-import android.util.Log;
 
 public class Game {
 
@@ -169,7 +172,10 @@ public class Game {
 	public void AnimationsComplete() {
 		CheckDestroyBlocks();
 		if (IsGameOver()) {
-			Log.d("BOOMBULER", "GAME OVER");
+			this.setBlockChangedListener(null);
+			CCScene gameOver = GameOverScreen.scene(mState.Difficulty, mState.TotalScore);
+			CCTransitionScene trans = Main.getTransisionFor(gameOver);			
+			CCDirector.sharedDirector().replaceScene(trans);
 			setDifficulty(Difficulty.Normal);
 		}
 	}
@@ -255,8 +261,12 @@ public class Game {
 	}
 	
 	public void setBlockChangedListener(BlockChangeListener listener) {
+		if (listener == mBlockListener)
+			return;
 		mBlockListener = listener;
 		if (mBlockListener != null) {
+			mBlockListener.Cleared();
+			
 			for (int row = 0; row < BOARD_SIZE_WITH_CACHE; row++) {
 				for (int col = 0; col < BOARD_SIZE_WITH_CACHE; col++) {
 					byte typ = mState.Board[row][col];

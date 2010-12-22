@@ -1,7 +1,10 @@
 package com.boombuler.games.shift;
 
+import org.cocos2d.layers.CCScene;
 import org.cocos2d.nodes.CCDirector;
 import org.cocos2d.opengl.CCGLSurfaceView;
+import org.cocos2d.transitions.CCFadeTransition;
+import org.cocos2d.transitions.CCTransitionScene;
 
 import android.app.Activity;
 import android.os.Bundle;
@@ -60,13 +63,16 @@ public class Main extends Activity {
 		}
 	}
       
+    public static CCTransitionScene getTransisionFor(CCScene scene) {
+    	return CCFadeTransition.transition(0.5f, scene);
+    }
     
     @Override
     public void onStart() {
         super.onStart(); 
         // frames per second
-        CCDirector.sharedDirector().setAnimationInterval(1.0f / 60);
-        Board.GoToBoard();
+        CCDirector.sharedDirector().setAnimationInterval(1.0f / 60);        
+        CCDirector.sharedDirector().runWithScene(Board.scene());
     }
 
     @Override

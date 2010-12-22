@@ -2,6 +2,9 @@
 <resources>
     <string name="app_name">Shift</string>
     <string name="score">Score: %1$d (%2$d)</string>
+    <string name="you_loose">You Loose!</string>
+    <string name="new_highscore">New Highscore!</string>
+    <string name="new_hs_score">(Score: %d)</string>
     <string-array name="helpscreen">    
     	<item>Click Left, Right, Up or</item> 
     	<item>Down to have the free</item>

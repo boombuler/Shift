@@ -19,21 +19,24 @@ public class Board extends CCLayer implements Game.BlockChangeListener {
 
 	public static final float ANIMATION_TIME = 0.3f;
 	private static CCScene fCurrent = null;
+	private static Board fCurrentBoard = null;
 	
-	public static void GoToBoard() {
+	public static CCScene scene() {
 		if (Settings.Current().getHasReadManual())
-			CCDirector.sharedDirector().runWithScene(Board.scene());
+			return MakeScene();
 		else
-			CCDirector.sharedDirector().runWithScene(HelpScreen.scene(Board.scene()));
+			return HelpScreen.scene(MakeScene());
 	}
 	
-	private static CCScene scene() {
+	private static CCScene MakeScene() {
 		if (fCurrent == null) {
+			fCurrentBoard = new Board();
 			fCurrent = CCScene.node();
 			fCurrent.addChild(new Background());
-			fCurrent.addChild(new Board());
+			fCurrent.addChild(fCurrentBoard);
 			fCurrent.addChild(new ScoreLabel());			
 		}
+		Game.Current().setBlockChangedListener(fCurrentBoard);
 		return fCurrent;
 	}
 		
@@ -108,7 +111,8 @@ public class Board extends CCLayer implements Game.BlockChangeListener {
 
 	@Override
 	public void Cleared() {
-		this.children_.clear();
+		if (this.children_ != null)
+			this.children_.clear();
 	}
 	
 	@Override

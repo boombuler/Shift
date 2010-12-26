@@ -14,7 +14,7 @@ import android.content.SharedPreferences.Editor;
 
 public class Settings implements Comparator<Long>{
 
-	private static final int MAX_HIGHSCORE_COUNT = 10;
+	public static final int MAX_HIGHSCORE_COUNT = 10;
 	private static final Settings fCurrent = new Settings();
 	
 	public static Settings Current() {
@@ -89,4 +89,12 @@ public class Settings implements Comparator<Long>{
 		return object2.compareTo(object1);
 	}
 	
+	public Long[] getHighscores(Difficulty difficulty) {
+		Long[] result = new Long[MAX_HIGHSCORE_COUNT];
+		if (difficulty == Difficulty.Easy)
+			mHighscoreEasy.toArray(result);
+		else
+			mHighscoreNormal.toArray(result);
+		return result;
+	}
 }

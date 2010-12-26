@@ -31,8 +31,9 @@ public class MainMenu extends CCLayer {
 		CCMenuItem normal = getTextItem(R.string.normal, "startNormal");
 		CCMenuItem quit = getTextItem(R.string.quit, "onQuit");
 		CCMenuItem help = getTextItem(R.string.show_help, "showHelp");
+		CCMenuItem highscore = getTextItem(R.string.highscore, "showHighscore");
 		
-        CCMenu result = CCMenu.menu(easy, normal, help, quit);
+        CCMenu result = CCMenu.menu(easy, normal, highscore, help, quit);
 		result.alignItemsVertically();
 		return result;
 	}
@@ -65,6 +66,11 @@ public class MainMenu extends CCLayer {
 	public void showHelp() {
 		CCTransitionScene helpScrn = Main.getTransisionFor(HelpScreen.scene(scene()));
 		CCDirector.sharedDirector().replaceScene(helpScrn);
+	}
+	
+	public void showHighscore() {
+		CCTransitionScene scores = Main.getTransisionFor(Highscores.scene());
+		CCDirector.sharedDirector().replaceScene(scores);
 	}
 	
 }

@@ -7,6 +7,7 @@
     <string name="new_hs_score">(Score: %d)</string>
     <string name="easy">Easy</string>
     <string name="normal">Normal</string>
+    <string name="highscore">Highscore</string>
     <string name="show_help">Help</string>
     <string name="quit">Quit</string>
     

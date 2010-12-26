@@ -71,8 +71,11 @@ public class Main extends Activity {
     public void onStart() {
         super.onStart(); 
         // frames per second
-        CCDirector.sharedDirector().setAnimationInterval(1.0f / 60);        
-        CCDirector.sharedDirector().runWithScene(Board.scene());
+        CCDirector.sharedDirector().setAnimationInterval(1.0f / 60);       
+        if (Game.Current().getIsPlaying())
+        	CCDirector.sharedDirector().runWithScene(Board.scene());
+        else
+        	CCDirector.sharedDirector().runWithScene(MainMenu.scene());
     }
 
     @Override

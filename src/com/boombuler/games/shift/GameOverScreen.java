@@ -40,7 +40,11 @@ public class GameOverScreen extends CCLayer {
 	
 	@Override
 	public boolean ccTouchesEnded(MotionEvent event) {		
-		CCDirector.sharedDirector().replaceScene(Main.getTransisionFor(Board.scene()));
+		CCDirector.sharedDirector().replaceScene(
+				Main.getTransisionFor(
+						MainMenu.scene()
+				)
+		);
 		
 		return super.ccTouchesEnded(event);
 	}

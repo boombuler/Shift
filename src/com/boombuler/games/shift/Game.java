@@ -67,6 +67,7 @@ public class Game {
 	private final Random mRandom = new Random();
 	private ScoreChangedListener mScoreListener;
 	private BlockChangeListener mBlockListener; 
+	private boolean mIsPlaying = false;
 	
 	
 	
@@ -173,10 +174,10 @@ public class Game {
 		CheckDestroyBlocks();
 		if (IsGameOver()) {
 			this.setBlockChangedListener(null);
+			mIsPlaying = false;
 			CCScene gameOver = GameOverScreen.scene(mState.Difficulty, mState.TotalScore);
 			CCTransitionScene trans = Main.getTransisionFor(gameOver);			
 			CCDirector.sharedDirector().replaceScene(trans);
-			setDifficulty(Difficulty.Normal);
 		}
 	}
 	
@@ -266,7 +267,7 @@ public class Game {
 		mBlockListener = listener;
 		if (mBlockListener != null) {
 			mBlockListener.Cleared();
-			
+			mIsPlaying = true;
 			for (int row = 0; row < BOARD_SIZE_WITH_CACHE; row++) {
 				for (int col = 0; col < BOARD_SIZE_WITH_CACHE; col++) {
 					byte typ = mState.Board[row][col];
@@ -284,4 +285,7 @@ public class Game {
 		}
 	}
 	
+	public boolean getIsPlaying() {
+		return mIsPlaying;
+	}
 }

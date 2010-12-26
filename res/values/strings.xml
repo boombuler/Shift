@@ -5,6 +5,11 @@
     <string name="you_loose">You Loose!</string>
     <string name="new_highscore">New Highscore!</string>
     <string name="new_hs_score">(Score: %d)</string>
+    <string name="easy">Easy</string>
+    <string name="normal">Normal</string>
+    <string name="show_help">Help</string>
+    <string name="quit">Quit</string>
+    
     <string-array name="helpscreen">    
     	<item>Click Left, Right, Up or</item> 
     	<item>Down to have the free</item>

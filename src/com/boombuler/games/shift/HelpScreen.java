@@ -16,8 +16,10 @@ public class HelpScreen extends CCLayer {
 	public static CCScene scene(CCScene next) {
 		CCScene result = CCScene.node();
 		result.addChild(new Background());
-		result.addChild(new HelpScreen(next));
-		result.setScale(Main.SCALE);
+		CCLayer scaleLayer = CCLayer.node();
+		scaleLayer.addChild(new HelpScreen(next));
+		scaleLayer.setScale(Main.SCALE);
+		result.addChild(scaleLayer);
 		return result;
 	}
 	
@@ -25,7 +27,6 @@ public class HelpScreen extends CCLayer {
 	
 	public HelpScreen(CCScene next) {
 		mNext = next;
-		
 		CGSize s = CCDirector.sharedDirector().winSize();
 
 		String[] text = MyResources.stringArray(R.array.helpscreen);

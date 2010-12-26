@@ -4,31 +4,42 @@ import org.cocos2d.layers.CCLayer;
 import org.cocos2d.layers.CCScene;
 import org.cocos2d.menus.*;
 import org.cocos2d.nodes.CCDirector;
-import org.cocos2d.nodes.CCNode;
-import org.cocos2d.nodes.CCSprite;
-import org.cocos2d.types.CGSize;
+import org.cocos2d.transitions.CCTransitionScene;
 
-import android.util.Log;
+import com.boombuler.games.shift.Game.Difficulty;
+import com.boombuler.games.shift.render.Background;
+import com.boombuler.games.shift.render.Label;
+
 
 
 
 public class MainMenu extends CCLayer {
 
+	private static CCScene fCurrent = null;
+	
 	public static CCScene scene() {
-		CCScene result = CCScene.node();
-		result.addChild(getBackground());
-		result.addChild(new MainMenu());
-		return result;
+		if (fCurrent == null) {
+			fCurrent = CCScene.node();
+			fCurrent.addChild(new Background());
+			fCurrent.addChild(new MainMenu());
+		}
+		return fCurrent;
 	}
 	
 	private CCLayer getMenu() {	
+		CCMenuItem easy = getTextItem(R.string.easy, "startEasy");
+		CCMenuItem normal = getTextItem(R.string.normal, "startNormal");
+		CCMenuItem quit = getTextItem(R.string.quit, "onQuit");
+		CCMenuItem help = getTextItem(R.string.show_help, "showHelp");
 		
-		CCMenuItem itm = CCMenuItemAtlasFont.item("HALLO", "Fonts.png", 16, 16, '0', this, "onLog");
-		
-		
-        CCMenu result = CCMenu.menu(itm);
+        CCMenu result = CCMenu.menu(easy, normal, help, quit);
 		result.alignItemsVertically();
 		return result;
+	}
+	
+	private CCMenuItem getTextItem(int resourceId, String selector) {
+		Label lbl = new Label(MyResources.string(resourceId), Label.DEFAULT);
+		return CCMenuItemAtlasFont.item(lbl, this, selector);
 	}
 	
 	private MainMenu() {
@@ -36,20 +47,24 @@ public class MainMenu extends CCLayer {
 	}
 	
 	public void onQuit() {
-		CCDirector.sharedDirector().end();
+		CCDirector.sharedDirector().getActivity().finish();		
 	}
 	
-	public void onLog() {
-		Log.d("BOOMBULER", "test me!");
+	public void startEasy() {
+		Game.Current().setDifficulty(Difficulty.Easy);
+		CCTransitionScene board = Main.getTransisionFor(Board.scene());
+		CCDirector.sharedDirector().replaceScene(board);
 	}
 	
-	private static CCNode getBackground() {
-		CCSprite bgimg = CCSprite.sprite("bground.png");
-		
-		CGSize s = CCDirector.sharedDirector().winSize();
-		
-		bgimg.setPosition(s.width / 2, s.height / 2);
-		return bgimg;
+	public void startNormal() {
+		Game.Current().setDifficulty(Difficulty.Normal);
+		CCTransitionScene board = Main.getTransisionFor(Board.scene());
+		CCDirector.sharedDirector().replaceScene(board);		
+	}
+	
+	public void showHelp() {
+		CCTransitionScene helpScrn = Main.getTransisionFor(HelpScreen.scene(scene()));
+		CCDirector.sharedDirector().replaceScene(helpScrn);
 	}
 	
 }

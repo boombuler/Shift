@@ -15,17 +15,22 @@
  */
 package com.boombuler.games.shift;
 
+import java.util.List;
+
 import org.cocos2d.layers.CCLayer;
 import org.cocos2d.layers.CCScene;
 import org.cocos2d.menus.*;
 import org.cocos2d.nodes.CCDirector;
+import org.cocos2d.nodes.CCNode;
 import org.cocos2d.transitions.CCTransitionScene;
+
+import android.view.KeyEvent;
 
 import com.boombuler.games.shift.Game.Difficulty;
 import com.boombuler.games.shift.render.Background;
 import com.boombuler.games.shift.render.Label;
 
-public class MainMenu extends CCLayer {
+public class MainMenu extends CCLayer implements KeyHandler {
 
 	private static CCScene fCurrent = null;
 	
@@ -38,7 +43,9 @@ public class MainMenu extends CCLayer {
 		return fCurrent;
 	}
 	
-	private CCLayer getMenu() {	
+	private final CCMenu mMenu;
+	
+	private CCMenu getMenu() {	
 		CCMenuItem easy = getTextItem(R.string.easy, "startEasy");
 		CCMenuItem normal = getTextItem(R.string.normal, "startNormal");
 		CCMenuItem quit = getTextItem(R.string.quit, "onQuit");
@@ -56,7 +63,8 @@ public class MainMenu extends CCLayer {
 	}
 	
 	private MainMenu() {
-		this.addChild(getMenu());
+		mMenu = getMenu();
+		this.addChild(mMenu);
 	}
 	
 	public void onQuit() {
@@ -83,6 +91,46 @@ public class MainMenu extends CCLayer {
 	public void showHighscore() {
 		CCTransitionScene scores = Main.getTransisionFor(Highscores.scene());
 		CCDirector.sharedDirector().replaceScene(scores);
+	}
+
+	@Override
+	public boolean HandleKeyEvent(KeyEvent event) {
+		if (event.getAction() == KeyEvent.ACTION_UP) {
+			switch(event.getKeyCode()) {
+				case KeyEvent.KEYCODE_DPAD_DOWN:
+					moveSelection(false); break;
+				case KeyEvent.KEYCODE_DPAD_UP:
+					moveSelection(true); break;
+				case KeyEvent.KEYCODE_DPAD_CENTER:
+					execSelectedItem(); break;
+			}
+		}
+		return false;
+	}
+	
+	private void execSelectedItem() {
+		CCMenuItem selItm = mMenu.getSelectedItem();
+		selItm.activate();
+	}
+	
+	private void moveSelection(boolean next) {
+		List<CCNode> nodes = mMenu.getChildren();
+		CCMenuItem selItm = mMenu.getSelectedItem();
+		if (selItm != null)
+			selItm.unselected();
+		
+		int selIdx = nodes.indexOf(selItm);
+		if (next)
+			selIdx--;
+		else
+			selIdx++;
+		if (selIdx < 0)
+			selIdx = nodes.size() -1;
+		if (selIdx >= nodes.size())
+			selIdx = 0;
+		selItm = ((CCMenuItem)nodes.get(selIdx));		
+		mMenu.setSelectedItem(selItm);
+		selItm.selected();
 	}
 	
 }

@@ -21,25 +21,36 @@ import org.cocos2d.nodes.CCDirector;
 import org.cocos2d.transitions.*;
 import org.cocos2d.types.CGSize;
 
+import android.view.KeyEvent;
 import android.view.MotionEvent;
 
 import com.boombuler.games.shift.render.Background;
 import com.boombuler.games.shift.render.Label;
 
-public class HelpScreen extends CCLayer {
+public class HelpScreen extends CCLayer  {
 
 	public static CCScene scene(CCScene next) {
 		CCScene result = CCScene.node();
 		result.addChild(new Background());
-		CCLayer scaleLayer = CCLayer.node();
-		scaleLayer.addChild(new HelpScreen(next));
-		scaleLayer.setScale(Main.SCALE);
-		result.addChild(scaleLayer);
+		result.addChild((new HelpScreen(next)).getScaleLayer());
 		return result;
 	}
 	
 	private CCScene mNext;
 	
+	class ScaleLayer extends CCLayer implements KeyHandler{
+		public ScaleLayer() {
+			addChild(HelpScreen.this);
+			setScale(Main.SCALE);
+		}
+		
+		@Override
+		public boolean HandleKeyEvent(KeyEvent event) {
+			HelpScreen.this.done();
+			return false;
+		}
+	}
+		
 	public HelpScreen(CCScene next) {
 		mNext = next;
 		CGSize s = CCDirector.sharedDirector().winSize();
@@ -56,13 +67,22 @@ public class HelpScreen extends CCLayer {
 		setIsTouchEnabled(true);
 	}
 	
+	private ScaleLayer getScaleLayer() {
+		return new ScaleLayer();
+	}
+	
 	@Override
 	public boolean ccTouchesEnded(MotionEvent event) {
+		done();
+		return super.ccTouchesEnded(event);
+	}
+	
+	void done() {
 		Settings.Current().setHasReadManual(true);
 		CCTransitionScene transition = Main.getTransisionFor(mNext);
 		CCDirector.sharedDirector().replaceScene(transition);
-		mNext = null;		
-		return super.ccTouchesEnded(event);
+		mNext = null;
 	}
+
 	
 }

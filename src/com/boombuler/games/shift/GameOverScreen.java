@@ -20,13 +20,14 @@ import org.cocos2d.layers.CCScene;
 import org.cocos2d.nodes.CCDirector;
 import org.cocos2d.types.CGSize;
 
+import android.view.KeyEvent;
 import android.view.MotionEvent;
 
 import com.boombuler.games.shift.Game.Difficulty;
 import com.boombuler.games.shift.render.Background;
 import com.boombuler.games.shift.render.Label;
 
-public class GameOverScreen extends CCLayer {
+public class GameOverScreen extends CCLayer implements KeyHandler {
 
 	public static CCScene scene(Difficulty difficulty, long totalscore) {
 		boolean NewHighscore = Settings.Current().addToHighscore(difficulty, totalscore);
@@ -55,12 +56,21 @@ public class GameOverScreen extends CCLayer {
 	
 	@Override
 	public boolean ccTouchesEnded(MotionEvent event) {		
+		done();
+		return super.ccTouchesEnded(event);
+	}
+
+	private void done() {
 		CCDirector.sharedDirector().replaceScene(
 				Main.getTransisionFor(
 						MainMenu.scene()
 				)
-		);
-		
-		return super.ccTouchesEnded(event);
+		);		
+	}
+	
+	@Override
+	public boolean HandleKeyEvent(KeyEvent event) {
+		done();
+		return false;
 	}
 }

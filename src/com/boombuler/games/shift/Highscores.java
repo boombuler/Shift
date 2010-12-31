@@ -22,13 +22,14 @@ import org.cocos2d.nodes.CCNode;
 import org.cocos2d.transitions.CCTransitionScene;
 import org.cocos2d.types.CGSize;
 
+import android.view.KeyEvent;
 import android.view.MotionEvent;
 
 import com.boombuler.games.shift.Game.Difficulty;
 import com.boombuler.games.shift.render.Background;
 import com.boombuler.games.shift.render.Label;
 
-public class Highscores extends CCLayer {
+public class Highscores extends CCLayer implements KeyHandler{
 
 	public static CCScene scene() {
 		CCScene result = CCScene.node();
@@ -78,9 +79,19 @@ public class Highscores extends CCLayer {
 	
 	@Override
 	public boolean ccTouchesEnded(MotionEvent event) {
+		done();
+		return super.ccTouchesEnded(event);
+	}
+	
+	private void done() {
 		Settings.Current().setHasReadManual(true);
 		CCTransitionScene transition = Main.getTransisionFor(MainMenu.scene());
 		CCDirector.sharedDirector().replaceScene(transition);
-		return super.ccTouchesEnded(event);
+	}
+
+	@Override
+	public boolean HandleKeyEvent(KeyEvent event) {
+		done();
+		return false;
 	}
 }

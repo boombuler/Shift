@@ -201,7 +201,7 @@ public class Board extends CCLayer implements Game.BlockChangeListener, KeyHandl
 
 	@Override
 	public boolean HandleKeyEvent(KeyEvent event) {
-		if (event.getAction() == KeyEvent.ACTION_UP) {
+		if (event.getAction() == KeyEvent.ACTION_UP && !IsAnimating()) {
 			switch(event.getKeyCode()) {
 				case KeyEvent.KEYCODE_MENU: {
 					gotoMainMenu();

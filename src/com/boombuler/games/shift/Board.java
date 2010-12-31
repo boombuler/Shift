@@ -121,9 +121,9 @@ public class Board extends CCLayer implements Game.BlockChangeListener, KeyHandl
 					Game.Current().Move(Game.MoveDirection.Left);
 			} else {
 				if (posY > 0)
-					Game.Current().Move(Game.MoveDirection.Up);
-				else
 					Game.Current().Move(Game.MoveDirection.Down);
+				else
+					Game.Current().Move(Game.MoveDirection.Up);
 			}
 		}
 		mTouchStart = null;
@@ -216,11 +216,11 @@ public class Board extends CCLayer implements Game.BlockChangeListener, KeyHandl
 					return true;
 				}
 				case KeyEvent.KEYCODE_DPAD_DOWN: {
-					Game.Current().Move(Game.MoveDirection.Up);
+					Game.Current().Move(Game.MoveDirection.Down);
 					return true;
 				}
 				case KeyEvent.KEYCODE_DPAD_UP: {
-					Game.Current().Move(Game.MoveDirection.Down);
+					Game.Current().Move(Game.MoveDirection.Up);
 					return true;
 				}
 				

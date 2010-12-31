@@ -164,13 +164,13 @@ public class Game {
 	public void Move(MoveDirection direction) {
 		
 		boolean anyMoved = false;
-		if (direction.equals(MoveDirection.Down)) {
+		if (direction.equals(MoveDirection.Up)) {
 			for(int row = BOARD_SIZE; row >= 0; row--) {
 				for(int col = BOARD_CACHE_SIZE; col < BOARD_SIZE + BOARD_CACHE_SIZE; col++) {
 					anyMoved |= DoMoveBlock(row, col, row+1, col);
 				}
 			}
-		} else if (direction.equals(MoveDirection.Up)) {
+		} else if (direction.equals(MoveDirection.Down)) {
 			for(int row = BOARD_CACHE_SIZE; row < BOARD_SIZE_WITH_CACHE; row++) {
 				for(int col = BOARD_CACHE_SIZE; col < BOARD_SIZE + BOARD_CACHE_SIZE; col++) {
 					anyMoved |= DoMoveBlock(row, col, row-1, col);

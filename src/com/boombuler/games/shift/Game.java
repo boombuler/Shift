@@ -36,6 +36,7 @@ public class Game {
 	
 	public static final byte BLOCK_COLOR_COUNT_EASY = 4;
 	public static final byte BLOCK_COLOR_COUNT_NORMAL = 5;
+	public static final byte BLOCK_COLOR_COUNT_HARD = 6;
 	
 	public static final byte BLOCK_TYPE_FREE = 0;
 	public static final byte BLOCK_TYPE_1 = 1;
@@ -43,6 +44,7 @@ public class Game {
 	public static final byte BLOCK_TYPE_3 = 3;
 	public static final byte BLOCK_TYPE_4 = 4;
 	public static final byte BLOCK_TYPE_5 = 5;
+	public static final byte BLOCK_TYPE_6 = 6;
 	
 	public interface BlockChangeListener {
 		void Cleared();
@@ -59,7 +61,8 @@ public class Game {
 
 	public enum Difficulty {
 		Easy,
-		Normal
+		Normal,
+		Hard
 	}
 	
 	public enum MoveDirection {
@@ -127,8 +130,17 @@ public class Game {
 	}
 	
 	private byte getValidRandomBlockForPos(int row, int col) {
-		int blockCnt = mState.Difficulty == Difficulty.Easy ? 
-				BLOCK_COLOR_COUNT_EASY : BLOCK_COLOR_COUNT_NORMAL;
+		final int blockCnt;
+		switch(mState.Difficulty) {
+			case Easy:
+				blockCnt = BLOCK_COLOR_COUNT_EASY; break;
+			case Normal:
+				blockCnt = BLOCK_COLOR_COUNT_NORMAL; break;
+			case Hard:
+				blockCnt = BLOCK_COLOR_COUNT_HARD; break;
+			default:
+				blockCnt = BLOCK_COLOR_COUNT_EASY; break;
+		}
 		while (true) {
 			byte rndV = (byte)(mRandom.nextInt(blockCnt)+BLOCK_TYPE_1);
 			

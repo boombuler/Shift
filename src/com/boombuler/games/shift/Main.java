@@ -17,6 +17,7 @@ package com.boombuler.games.shift;
 
 import org.cocos2d.layers.CCScene;
 import org.cocos2d.nodes.CCDirector;
+import org.cocos2d.nodes.CCNode;
 import org.cocos2d.opengl.CCGLSurfaceView;
 import org.cocos2d.transitions.CCFadeTransition;
 import org.cocos2d.transitions.CCTransitionScene;
@@ -24,6 +25,7 @@ import org.cocos2d.transitions.CCTransitionScene;
 import android.app.Activity;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
+import android.view.KeyEvent;
 import android.view.Window;
 import android.view.WindowManager;
 
@@ -57,6 +59,19 @@ public class Main extends Activity {
         CCDirector.sharedDirector().attachInView(mGLSurfaceView);
         
 	    setContentView(mGLSurfaceView);
+    }
+    
+    @Override
+    public boolean dispatchKeyEvent(KeyEvent event) {
+    	CCScene running = CCDirector.sharedDirector().getRunningScene();
+    	if (running != null) {
+	    	for (CCNode node : running.getChildren()) {
+	    		if (node instanceof KeyHandler)
+	    			if (((KeyHandler)node).HandleKeyEvent(event))
+	    				return true;
+	    	}
+    	}
+    	return super.dispatchKeyEvent(event);
     }
     
     

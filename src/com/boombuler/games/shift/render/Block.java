@@ -52,11 +52,12 @@ public class Block extends CCSprite{
 	
 	private static String getFile(byte type) {
 		switch(type) { 
-			case Game.BLOCK_TYPE_1: return "block_blue.png";
-			case Game.BLOCK_TYPE_2: return "block_green.png";
-			case Game.BLOCK_TYPE_3: return "block_red.png";
-			case Game.BLOCK_TYPE_4: return "block_yellow.png";
-			case Game.BLOCK_TYPE_5: return "block_grey.png";
+			case Game.BLOCK_TYPE_1: return "block1.png";
+			case Game.BLOCK_TYPE_2: return "block2.png";
+			case Game.BLOCK_TYPE_3: return "block3.png";
+			case Game.BLOCK_TYPE_4: return "block4.png";
+			case Game.BLOCK_TYPE_5: return "block5.png";
+			case Game.BLOCK_TYPE_6: return "block6.png";
 		}
 		return "";
 	}

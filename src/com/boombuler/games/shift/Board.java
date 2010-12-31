@@ -20,6 +20,8 @@ import org.cocos2d.layers.CCLayer;
 import org.cocos2d.layers.CCScene;
 import org.cocos2d.nodes.CCDirector;
 import org.cocos2d.nodes.CCNode;
+import org.cocos2d.nodes.CCSprite;
+import org.cocos2d.transitions.CCTransitionScene;
 import org.cocos2d.types.CGPoint;
 import org.cocos2d.types.CGSize;
 
@@ -28,9 +30,10 @@ import com.boombuler.games.shift.render.Block;
 import com.boombuler.games.shift.render.ScoreLabel;
 
 import android.graphics.PointF;
+import android.view.KeyEvent;
 import android.view.MotionEvent;
 
-public class Board extends CCLayer implements Game.BlockChangeListener {
+public class Board extends CCLayer implements Game.BlockChangeListener, KeyHandler {
 
 	public static final float ANIMATION_TIME = 0.3f;
 	private static CCScene fCurrent = null;
@@ -43,12 +46,23 @@ public class Board extends CCLayer implements Game.BlockChangeListener {
 			return HelpScreen.scene(MakeScene());
 	}
 	
+	private static CCSprite getCenterScaledImg(String img) {
+		CCSprite result = CCSprite.sprite(img);
+		CGSize s = CCDirector.sharedDirector().winSize();
+		result.setScale(Block.SCALE * Main.SCALE);		
+		result.setPosition(CGPoint.make(s.width / 2, s.height / 2));
+		return result;
+	}
+	
 	private static CCScene MakeScene() {
 		if (fCurrent == null) {
 			fCurrentBoard = new Board();
 			fCurrent = CCScene.node();
 			fCurrent.addChild(new Background());
+			fCurrent.addChild(getCenterScaledImg("gameboardbottom.png"));
+			
 			fCurrent.addChild(fCurrentBoard);
+			fCurrent.addChild(getCenterScaledImg("gameboardtop.png"));
 			fCurrent.addChild(new ScoreLabel());			
 		}
 		Game.Current().setBlockChangedListener(fCurrentBoard);
@@ -157,8 +171,9 @@ public class Board extends CCLayer implements Game.BlockChangeListener {
 	
 	public void removeNullBlocks() {
 		Block b = null;
+		
 		while((b = FindBlock(0, 0)) != null) {
-			children_.remove(b);
+			removeChild(b, true);
 		}
 	}
 	
@@ -183,5 +198,40 @@ public class Board extends CCLayer implements Game.BlockChangeListener {
 		}
 		return false;
 	}
+
+	@Override
+	public boolean HandleKeyEvent(KeyEvent event) {
+		if (event.getAction() == KeyEvent.ACTION_UP) {
+			switch(event.getKeyCode()) {
+				case KeyEvent.KEYCODE_MENU: {
+					gotoMainMenu();
+					return true;
+				}
+				case KeyEvent.KEYCODE_DPAD_LEFT: {
+					Game.Current().Move(Game.MoveDirection.Left);
+					return true;
+				}
+				case KeyEvent.KEYCODE_DPAD_RIGHT: {
+					Game.Current().Move(Game.MoveDirection.Right);
+					return true;
+				}
+				case KeyEvent.KEYCODE_DPAD_DOWN: {
+					Game.Current().Move(Game.MoveDirection.Up);
+					return true;
+				}
+				case KeyEvent.KEYCODE_DPAD_UP: {
+					Game.Current().Move(Game.MoveDirection.Down);
+					return true;
+				}
+				
+				default: return false;
+			}
+		}
+		return false;
+	}
 	
+	private void gotoMainMenu() {
+		CCTransitionScene trans = Main.getTransisionFor(MainMenu.scene());
+		CCDirector.sharedDirector().replaceScene(trans);
+	}
 }

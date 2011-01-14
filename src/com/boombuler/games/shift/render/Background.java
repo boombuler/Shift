@@ -25,7 +25,7 @@ import com.boombuler.games.shift.Main;
 public class Background extends CCSprite {
 
 	public Background() {
-		super("bground.png");
+		super("top.png");
 		CGSize s = CCDirector.sharedDirector().winSize();
 		setScaleX(Main.SCALE_X);
 		setScaleY(Main.SCALE_Y);

@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+	<integer-array name="bgFrom">
+		<item>0x18</item>
+		<item>0x1C</item>
+		<item>0x42</item>
+		<item>0xFF</item>
+	</integer-array>
+	<integer-array name="bgTo">
+		<item>0x54</item>
+		<item>0x5B</item>
+		<item>0xA1</item>
+		<item>0xFF</item>
+	</integer-array>
+</resources>

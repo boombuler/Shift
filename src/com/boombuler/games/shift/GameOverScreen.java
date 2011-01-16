@@ -33,7 +33,7 @@ public class GameOverScreen extends CCLayer implements KeyHandler {
 		boolean NewHighscore = Settings.Current().addToHighscore(difficulty, totalscore);
 		
 		CCScene result = CCScene.node();
-		result.addChild(new Background());
+		result.addChild(Background.node());
 		result.addChild(new GameOverScreen(NewHighscore, totalscore));
 		return result;
 	}

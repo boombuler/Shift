@@ -21,7 +21,7 @@ public class Label extends CCBitmapFontAtlas {
 
 	public static final float SMALLER = 24f;
 	public static final float DEFAULT = 32f;
-	private static final float REAL_FS = 48f;
+	private static final float REAL_FS = 32f;
 	
 	public Label(String string, float fontSize) {
 		super(string, "font.fnt");

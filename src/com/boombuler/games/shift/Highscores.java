@@ -33,7 +33,7 @@ public class Highscores extends CCLayer implements KeyHandler{
 
 	public static CCScene scene() {
 		CCScene result = CCScene.node();
-		result.addChild(new Background());
+		result.addChild(Background.node());
 		result.addChild(new Highscores());
 		return result;
 	}

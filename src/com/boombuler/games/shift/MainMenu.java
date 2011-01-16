@@ -22,13 +22,17 @@ import org.cocos2d.layers.CCScene;
 import org.cocos2d.menus.*;
 import org.cocos2d.nodes.CCDirector;
 import org.cocos2d.nodes.CCNode;
+import org.cocos2d.nodes.CCSprite;
 import org.cocos2d.transitions.CCTransitionScene;
+import org.cocos2d.types.CGSize;
 
 import android.view.KeyEvent;
 
 import com.boombuler.games.shift.Game.Difficulty;
 import com.boombuler.games.shift.render.Background;
+import com.boombuler.games.shift.render.Block;
 import com.boombuler.games.shift.render.Label;
+import com.boombuler.games.shift.render.TextEntry;
 
 public class MainMenu extends CCLayer implements KeyHandler {
 
@@ -37,7 +41,11 @@ public class MainMenu extends CCLayer implements KeyHandler {
 	public static CCScene scene() {
 		if (fCurrent == null) {
 			fCurrent = CCScene.node();
-			fCurrent.addChild(new Background());
+			fCurrent.addChild(Background.node());
+			
+			CCSprite image = Board.getCenterScaledImg("menu.png");
+			fCurrent.addChild(image);
+			
 			fCurrent.addChild(new MainMenu());
 		}
 		return fCurrent;
@@ -53,13 +61,28 @@ public class MainMenu extends CCLayer implements KeyHandler {
 		CCMenuItem highscore = getTextItem(R.string.highscore, "showHighscore");
 		
         CCMenu result = CCMenu.menu(easy, normal, highscore, help, quit);
-		result.alignItemsVertically();
+		result.alignItemsVertically(0f);
+		CGSize winSize = CCDirector.sharedDirector().winSize();
+		
+		result.setPosition(winSize.width / 2f, winSize.height / 4f);
 		return result;
 	}
 	
+	
 	private CCMenuItem getTextItem(int resourceId, String selector) {
-		Label lbl = new Label(MyResources.string(resourceId), Label.DEFAULT);
-		return CCMenuItemAtlasFont.item(lbl, this, selector);
+		String txt = MyResources.string(resourceId);
+		
+		CCNode entry = new TextEntry(false);
+		CCNode select = new TextEntry(true);
+		
+		CCMenuItemSprite result = CCMenuItemSprite.item(entry, select, 
+				this, selector);
+		Label lbl = new Label(txt, Label.SMALLER);
+		lbl.setAnchorPoint(0, 0);
+		lbl.setPosition(30f,3f);
+		result.addChild(lbl);
+		result.setScale(Block.SCALE * Main.SCALE);
+		return result;
 	}
 	
 	private MainMenu() {

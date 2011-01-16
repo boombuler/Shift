@@ -15,6 +15,8 @@
  */
 package com.boombuler.games.shift;
 
+import javax.microedition.khronos.opengles.GL10;
+
 import org.cocos2d.actions.instant.CCCallFunc;
 import org.cocos2d.layers.CCLayer;
 import org.cocos2d.layers.CCScene;
@@ -30,6 +32,7 @@ import com.boombuler.games.shift.render.Block;
 import com.boombuler.games.shift.render.ScoreLabel;
 
 import android.graphics.PointF;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.MotionEvent;
 
@@ -46,7 +49,7 @@ public class Board extends CCLayer implements Game.BlockChangeListener, KeyHandl
 			return HelpScreen.scene(MakeScene());
 	}
 	
-	private static CCSprite getCenterScaledImg(String img) {
+	public static CCSprite getCenterScaledImg(String img) {
 		CCSprite result = CCSprite.sprite(img);
 		CGSize s = CCDirector.sharedDirector().winSize();
 		result.setScale(Block.SCALE * Main.SCALE);		
@@ -58,7 +61,7 @@ public class Board extends CCLayer implements Game.BlockChangeListener, KeyHandl
 		if (fCurrent == null) {
 			fCurrentBoard = new Board();
 			fCurrent = CCScene.node();
-			fCurrent.addChild(new Background());
+			fCurrent.addChild(Background.node());
 			fCurrent.addChild(getCenterScaledImg("gameboardbottom.png"));
 			
 			fCurrent.addChild(fCurrentBoard);
@@ -128,6 +131,19 @@ public class Board extends CCLayer implements Game.BlockChangeListener, KeyHandl
 		}
 		mTouchStart = null;
 		return super.ccTouchesEnded(event);
+	}
+	
+	@Override
+	public void visit(GL10 gl) {
+		gl.glEnable(GL10.GL_SCISSOR_TEST);
+		int boardsize = (int)(Game.BOARD_SIZE * Block.BLOCK_SIZE * Main.SCALE);
+		CGSize size = CCDirector.sharedDirector().winSize();
+		int x = (int)(size.width - boardsize) / 2;
+		int y = (int)(size.height - boardsize) / 2;
+		
+		gl.glScissor(x, y, boardsize, boardsize);
+		super.visit(gl);
+		gl.glDisable(GL10.GL_SCISSOR_TEST);
 	}
 
 	@Override

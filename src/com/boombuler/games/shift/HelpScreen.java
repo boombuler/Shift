@@ -31,7 +31,7 @@ public class HelpScreen extends CCLayer  {
 
 	public static CCScene scene(CCScene next) {
 		CCScene result = CCScene.node();
-		result.addChild(new Background());
+		result.addChild(Background.node());
 		result.addChild((new HelpScreen(next)).getScaleLayer());
 		return result;
 	}

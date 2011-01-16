@@ -16,6 +16,7 @@
 package com.boombuler.games.shift;
 
 import org.cocos2d.nodes.CCSprite;
+import org.cocos2d.types.ccColor4B;
 
 import android.content.Context;
 import android.content.res.Resources;
@@ -42,5 +43,10 @@ public class MyResources {
 		Bitmap myBitmap = BitmapFactory.decodeResource(mResources, resourceId);
 		
 		return CCSprite.sprite(myBitmap, String.valueOf(resourceId));
+	}
+	
+	public static ccColor4B color(int resourceId) {
+		int[] color = mResources.getIntArray(resourceId);
+		return new ccColor4B(color[0], color[1], color[2], color[3]);
 	}
 }

@@ -33,6 +33,7 @@ import com.boombuler.games.shift.render.Background;
 import com.boombuler.games.shift.render.Block;
 import com.boombuler.games.shift.render.Label;
 import com.boombuler.games.shift.render.TextEntry;
+import com.boombuler.games.shift.render.TextEntry.TextBoxType;
 
 public class MainMenu extends CCLayer implements KeyHandler {
 
@@ -72,8 +73,8 @@ public class MainMenu extends CCLayer implements KeyHandler {
 	private CCMenuItem getTextItem(int resourceId, String selector) {
 		String txt = MyResources.string(resourceId);
 		
-		CCNode entry = new TextEntry(false);
-		CCNode select = new TextEntry(true);
+		CCNode entry = new TextEntry(TextBoxType.NotSelected, null);
+		CCNode select = new TextEntry(TextBoxType.Selected, null);
 		
 		CCMenuItemSprite result = CCMenuItemSprite.item(entry, select, 
 				this, selector);

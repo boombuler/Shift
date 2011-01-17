@@ -16,7 +16,8 @@
  -->
 <resources>
     <string name="app_name">Shift</string>
-    <string name="score">Score: %1$d (%2$d)</string>
+    <string name="score">Total Score: %d</string>
+    <string name="lastmove">Last Move: %d</string>
     <string name="you_loose">You Loose!</string>
     <string name="new_highscore">New Highscore!</string>
     <string name="new_hs_score">(Score: %d)</string>

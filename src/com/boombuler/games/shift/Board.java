@@ -32,7 +32,6 @@ import com.boombuler.games.shift.render.Block;
 import com.boombuler.games.shift.render.ScoreLabel;
 
 import android.graphics.PointF;
-import android.util.Log;
 import android.view.KeyEvent;
 import android.view.MotionEvent;
 

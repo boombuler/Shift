@@ -1,4 +1,6 @@
 .classpath
+local.properties
+build.xml
 .project
 bin/
 gen/

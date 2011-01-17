@@ -77,11 +77,11 @@ public class MainMenu extends CCLayer implements KeyHandler {
 		
 		CCMenuItemSprite result = CCMenuItemSprite.item(entry, select, 
 				this, selector);
-		Label lbl = new Label(txt, Label.SMALLER);
+		Label lbl = new Label(txt, Label.DEFAULT);
 		lbl.setAnchorPoint(0, 0);
 		lbl.setPosition(30f,3f);
 		result.addChild(lbl);
-		result.setScale(Block.SCALE * Main.SCALE);
+		result.setScale(Main.SCALE);
 		return result;
 	}
 	

@@ -36,6 +36,9 @@ public class ScoreLabel extends CCLayer implements Game.ScoreChangedListener{
 		mLabel.setScale(Block.SCALE);
 		mLabel.setPosition(10, s.height - 30);
 		this.addChild(mLabel);
+		
+		CGSize s = CCDirector.sharedDirector().winSize();
+		setPosition(CGPoint.make(s.width / 2, s.height / 10));
 		Game.Current().setScoreChangedListener(this);		
 	}
 

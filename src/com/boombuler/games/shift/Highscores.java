@@ -28,6 +28,8 @@ import android.view.MotionEvent;
 import com.boombuler.games.shift.Game.Difficulty;
 import com.boombuler.games.shift.render.Background;
 import com.boombuler.games.shift.render.Label;
+import com.boombuler.games.shift.render.TextEntry;
+import com.boombuler.games.shift.render.TextEntry.TextBoxType;
 
 public class Highscores extends CCLayer implements KeyHandler{
 
@@ -60,8 +62,10 @@ public class Highscores extends CCLayer implements KeyHandler{
 		Long[] scores = Settings.Current().getHighscores(difficulty);
 		int pos=1+(scores.length) * (int)Label.DEFAULT;
 
-		Label header = new Label(difficulty == Difficulty.Easy ? MyResources.string(R.string.easy):
-			MyResources.string(R.string.normal), Label.DEFAULT);		
+		TextEntry header = new TextEntry(TextBoxType.HighscoreHead, 
+				difficulty == Difficulty.Easy ? 
+						MyResources.string(R.string.easy):
+						MyResources.string(R.string.normal));		
 		header.setPosition(x, pos);
 		pos -= Label.DEFAULT;
 		result.addChild(header);
@@ -69,7 +73,7 @@ public class Highscores extends CCLayer implements KeyHandler{
 		
 		for (Long score : scores) {
 			String str = score > 0 ? score.toString() : " ";
-			Label lbl = new Label(str, Label.DEFAULT);		
+			TextEntry lbl = new TextEntry(TextBoxType.HighscoreEntry, str);
 			lbl.setPosition(x, pos);
 			pos -= Label.DEFAULT;
 			result.addChild(lbl);

@@ -79,9 +79,9 @@ public class MainMenu extends CCLayer implements KeyHandler {
 				this, selector);
 		Label lbl = new Label(txt, Label.DEFAULT);
 		lbl.setAnchorPoint(0, 0);
-		lbl.setPosition(30f,3f);
+		lbl.setPosition(40f,3f);
 		result.addChild(lbl);
-		result.setScale(Main.SCALE);
+		result.setScale(Main.SCALE * Block.SCALE);
 		return result;
 	}
 	

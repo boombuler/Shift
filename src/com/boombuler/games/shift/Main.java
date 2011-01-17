@@ -53,6 +53,7 @@ public class Main extends Activity {
     	
     	calcScreenDimensions();
 
+		CCDirector.sharedDirector().setPixelFormat(CCDirector.kCCPixelFormatRGBA8888);
     	CCDirector.sharedDirector().setScreenSize(SUPPOSED_WIN_WIDTH, SUPPOSED_WIN_HEIGHT);
         CCDirector.sharedDirector().setDeviceOrientation(CCDirector.kCCDeviceOrientationPortrait);
         CCDirector.sharedDirector().setDisplayFPS(false);

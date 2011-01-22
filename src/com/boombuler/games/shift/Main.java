@@ -23,6 +23,7 @@ import org.cocos2d.transitions.CCFadeTransition;
 import org.cocos2d.transitions.CCTransitionScene;
 
 import android.app.Activity;
+import android.graphics.PixelFormat;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
 import android.view.KeyEvent;
@@ -50,6 +51,9 @@ public class Main extends Activity {
     	getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
     	getWindow().setFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON, WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
     	mGLSurfaceView = new CCGLSurfaceView(this);
+    	// 32 bit
+    	mGLSurfaceView.setEGLConfigChooser(8,8,8,8,0,0);
+    	mGLSurfaceView.getHolder().setFormat(PixelFormat.TRANSLUCENT);
     	
     	calcScreenDimensions();
 

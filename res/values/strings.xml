@@ -18,26 +18,22 @@
     <string name="app_name">Shift</string>
     <string name="score">Total Score: %d</string>
     <string name="lastmove">Last Move: %d</string>
-    <string name="you_loose">You Loose!</string>
-    <string name="new_highscore">New Highscore!</string>
-    <string name="new_hs_score">(Score: %d)</string>
     <string name="easy">Easy</string>
     <string name="normal">Normal</string>
     <string name="highscore">Highscore</string>
     <string name="show_help">Help</string>
     <string name="quit">Quit</string>
     
-    <string-array name="helpscreen">    
+    <string-array name="helpscreen">
+    <item> </item>
+    <item> </item>    
     	<item>Click Left, Right, Up or</item> 
     	<item>Down to have the free</item>
     	<item>Blocks move in that direction.</item>
     	<item> </item>
-		<item>If you form groups</item>
-		<item>of 3 or more blocks,</item>
-		<item>they will be removed,</item>
-		<item>giving you more space</item>
+		<item>If you form groups of 3</item>
+		<item>or more blocks, they will be</item>
+		<item>removed, giving you more space</item>
 		<item>to move the blocks further.</item>
-		<item> </item>
-		<item>Good Luck!</item>
 	</string-array>
 </resources>

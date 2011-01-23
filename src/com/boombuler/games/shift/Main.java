@@ -114,20 +114,27 @@ public class Main extends Activity {
 
     @Override
     public void onPause() {
-        super.onPause();
-        CCDirector.sharedDirector().pause();
+    	try{
+    		super.onPause();
+        	CCDirector.sharedDirector().pause();
+    	} catch (Exception ex){}
     }
 
     @Override
     public void onResume() {
-        super.onResume();
-        CCDirector.sharedDirector().resume();
+    	try
+    	{
+    		super.onResume();
+        	CCDirector.sharedDirector().resume();
+    	} catch (Exception ex){}
     }
 
     @Override
     public void onDestroy() {
-        super.onStop();
-        CCDirector.sharedDirector().end();
+    	try {
+    		super.onStop();
+        	CCDirector.sharedDirector().end();
+    	} catch (Exception ex){}
     }
     
 }

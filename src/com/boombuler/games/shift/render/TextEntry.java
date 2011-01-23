@@ -9,8 +9,7 @@ public class TextEntry extends CCSprite {
 		Selected,
 		NotSelected,
 		Normal,
-		HighscoreEntry,
-		HighscoreHead
+		HighscoreEntry
 	}
 	
 	private final Label mLabel;
@@ -18,20 +17,14 @@ public class TextEntry extends CCSprite {
 	public TextEntry(TextBoxType type, String text) {
 		super(type == TextBoxType.Normal ? "textentry.png" : 
 				(type == TextBoxType.HighscoreEntry ? "highscoreentry.png" :
-					(type == TextBoxType.HighscoreHead ? "highscorehead.png" :
-						(type == TextBoxType.Selected ? "textentry_sel.png" : 
-							"textentry_nosel.png"))));
+					(type == TextBoxType.Selected ? "textentry_sel.png" : 
+						"textentry_nosel.png")));
 		if (text != null) {
 			mLabel = new Label(text, type == TextBoxType.HighscoreEntry ?
 					Label.SMALLER : Label.DEFAULT);
-			if (type == TextBoxType.HighscoreHead)
-				mLabel.setAnchorPoint(0.5f, 0f);
-			else
-				mLabel.setAnchorPoint(0f, 0f);
+			mLabel.setAnchorPoint(0f, 0f);
 			if (type == TextBoxType.Normal) 
 				mLabel.setPosition(10f, 3f);
-			else if (type == TextBoxType.HighscoreHead)
-				mLabel.setPosition(75f, 2f);
 			else if (type == TextBoxType.HighscoreEntry)
 				mLabel.setPosition(30f, 2f);
 			else

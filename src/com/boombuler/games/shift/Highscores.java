@@ -19,6 +19,7 @@ import org.cocos2d.layers.CCLayer;
 import org.cocos2d.layers.CCScene;
 import org.cocos2d.nodes.CCDirector;
 import org.cocos2d.nodes.CCNode;
+import org.cocos2d.nodes.CCSprite;
 import org.cocos2d.transitions.CCTransitionScene;
 import org.cocos2d.types.CGSize;
 
@@ -27,6 +28,7 @@ import android.view.MotionEvent;
 
 import com.boombuler.games.shift.Game.Difficulty;
 import com.boombuler.games.shift.render.Background;
+import com.boombuler.games.shift.render.Block;
 import com.boombuler.games.shift.render.Label;
 import com.boombuler.games.shift.render.TextEntry;
 import com.boombuler.games.shift.render.TextEntry.TextBoxType;
@@ -48,11 +50,20 @@ public class Highscores extends CCLayer implements KeyHandler{
 		CCNode easy = buildTable(Difficulty.Easy, colWidth * 1);
 		CCNode normal = buildTable(Difficulty.Normal, colWidth * 3);
 
-		float y = (s.height / 2) - (Settings.MAX_HIGHSCORE_COUNT * Label.DEFAULT)/2;
+		CCSprite head = CCSprite.sprite("highscores.png");
+		head.setScale(Block.SCALE * Main.SCALE);
+		final float headHeight = 63 * Block.SCALE;
+		
+		final float textHeight = (Settings.MAX_HIGHSCORE_COUNT * Label.DEFAULT);
+		float y = (s.height / 2) - (textHeight + headHeight)/2;
 		
 		easy.setPosition(0, y);
-		normal.setPosition(0, y);		
+		normal.setPosition(0, y);
 		
+		y = (s.height / 2) + (textHeight / 2) + headHeight;
+		
+		head.setPosition(s.width / 2, y);
+		this.addChild(head);
 	    this.addChild(easy);
 	    this.addChild(normal);
 	}
@@ -62,12 +73,12 @@ public class Highscores extends CCLayer implements KeyHandler{
 		Long[] scores = Settings.Current().getHighscores(difficulty);
 		int pos=1+(scores.length) * (int)Label.DEFAULT;
 
-		TextEntry header = new TextEntry(TextBoxType.HighscoreHead, 
+		CCSprite header = CCSprite.sprite( 
 				difficulty == Difficulty.Easy ? 
-						MyResources.string(R.string.easy):
-						MyResources.string(R.string.normal));		
+						"easy.png":
+						"normal.png");		
 		header.setPosition(x, pos);
-		pos -= Label.DEFAULT;
+		pos -= 35;
 		result.addChild(header);
 		
 		

@@ -18,6 +18,7 @@ package com.boombuler.games.shift;
 import org.cocos2d.layers.CCLayer;
 import org.cocos2d.layers.CCScene;
 import org.cocos2d.nodes.CCDirector;
+import org.cocos2d.nodes.CCSprite;
 import org.cocos2d.types.CGSize;
 
 import android.view.KeyEvent;
@@ -25,7 +26,7 @@ import android.view.MotionEvent;
 
 import com.boombuler.games.shift.Game.Difficulty;
 import com.boombuler.games.shift.render.Background;
-import com.boombuler.games.shift.render.Label;
+import com.boombuler.games.shift.render.Block;
 
 public class GameOverScreen extends CCLayer implements KeyHandler {
 
@@ -39,18 +40,26 @@ public class GameOverScreen extends CCLayer implements KeyHandler {
 	}
 	
 	private GameOverScreen(boolean highscore, long totalscore) {
+		CGSize s = CCDirector.sharedDirector().winSize();
+		
 		this.setIsTouchEnabled(true);
 		this.setScale(Main.SCALE);
-		String txt = MyResources.string(highscore ? R.string.new_highscore : R.string.you_loose);
-		Label lbl = new Label(txt);
-		CGSize s = CCDirector.sharedDirector().winSize();
-		float yPos = s.height / 2;
-		lbl.setPosition(s.width / 2,yPos);
-		this.addChild(lbl);
-		yPos -= Label.DEFAULT;
-		Label score = new Label(String.format(MyResources.string(R.string.new_hs_score), totalscore), Label.SMALLER);
+		
+		CCSprite bg = CCSprite.sprite("gameover.png");
+		bg.setScale(Block.SCALE);
+		bg.setPosition(s.width/2, s.height/2);
+		this.addChild(bg);		
+		/*
+		final float gbHeight = 490 * Block.SCALE;
+		TextEntry score = new TextEntry(TextBoxType.Normal, 
+				String.format(MyResources.string(R.string.score), totalscore));
+		final float scoreHeight = 40 * Block.SCALE;
+		score.setScale(Block.SCALE);
+	
+		
+		float yPos = s.height / 2 - ((gbHeight + scoreHeight) / 2);
 		score.setPosition(s.width / 2, yPos);
-		this.addChild(score);
+		this.addChild(score); */
 	}
 	
 	

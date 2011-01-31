@@ -15,7 +15,9 @@
  */
 package com.boombuler.games.shift.render;
 
+import org.cocos2d.actions.base.CCFiniteTimeAction;
 import org.cocos2d.actions.instant.CCCallFunc;
+import org.cocos2d.actions.instant.CCCallFuncN;
 import org.cocos2d.actions.interval.CCFadeOut;
 import org.cocos2d.actions.interval.CCMoveTo;
 import org.cocos2d.actions.interval.CCSequence;
@@ -45,7 +47,10 @@ public class Block extends CCSprite{
 	}
 	
 	private void checkVisible(int row, int col) {
-		this.setVisible(row > 0 && col > 0 && 
+		if (Board.DEBUG)
+			this.setVisible(true);
+		else
+			this.setVisible(row > 0 && col > 0 && 
 				row < Game.BOARD_SIZE_WITH_CACHE - Game.BOARD_CACHE_SIZE &&
 				col < Game.BOARD_SIZE_WITH_CACHE - Game.BOARD_CACHE_SIZE);
 	}
@@ -80,19 +85,21 @@ public class Block extends CCSprite{
 			this.runAction(fo);
 	}
 	
-	public void MoveTo(int row, int col) {
+	public CCFiniteTimeAction MoveTo(int row, int col) {
 		if (row != mRow || col != mCol) {
 			mNextCol = col;
 			mNextRow = row;
 			checkVisible(row, col);
-			CCMoveTo by = CCMoveTo.action(Board.ANIMATION_TIME, posToPoint(row, col));
-			CCCallFunc update = CCCallFunc.action(this, "updatePosition");
+			CCMoveTo by = CCMoveTo.action(Board.ANIMATION_TIME, 
+					posToPoint(row, col));
+			CCCallFunc update = CCCallFuncN.action(this, "updatePosition");
 			mAnimating = true;		
-			this.runAction(CCSequence.actions(by, update));
+			return CCSequence.actions(by, update);
 		}
+		return null;
 	}
 	
-	public void updatePosition() {
+	public void updatePosition(Object n) {
 		mCol = mNextCol;
 		mRow = mNextRow;		
 		mAnimating = false;

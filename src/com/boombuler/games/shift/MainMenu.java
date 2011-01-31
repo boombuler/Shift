@@ -57,15 +57,16 @@ public class MainMenu extends CCLayer implements KeyHandler {
 	private CCMenu getMenu() {	
 		CCMenuItem easy = getTextItem(R.string.easy, "startEasy");
 		CCMenuItem normal = getTextItem(R.string.normal, "startNormal");
+		CCMenuItem hard = getTextItem(R.string.hard, "startHard");
 		CCMenuItem quit = getTextItem(R.string.quit, "onQuit");
 		CCMenuItem help = getTextItem(R.string.show_help, "showHelp");
 		CCMenuItem highscore = getTextItem(R.string.highscore, "showHighscore");
 		
-        CCMenu result = CCMenu.menu(easy, normal, highscore, help, quit);
+        CCMenu result = CCMenu.menu(easy, normal, hard, highscore, help, quit);
 		result.alignItemsVertically(0f);
 		CGSize winSize = CCDirector.sharedDirector().winSize();
 		
-		result.setPosition(winSize.width / 2f, winSize.height / 4f);
+		result.setPosition(winSize.width / 2f, winSize.height / 4.5f);
 		return result;
 	}
 	
@@ -91,28 +92,34 @@ public class MainMenu extends CCLayer implements KeyHandler {
 		this.addChild(mMenu);
 	}
 	
-	public void onQuit() {
+	public void onQuit(Object sender) {
 		CCDirector.sharedDirector().getActivity().finish();		
 	}
 	
-	public void startEasy() {
+	public void startEasy(Object sender) {
 		Game.Current().setDifficulty(Difficulty.Easy);
 		CCTransitionScene board = Main.getTransisionFor(Board.scene());
 		CCDirector.sharedDirector().replaceScene(board);
 	}
 	
-	public void startNormal() {
+	public void startNormal(Object sender) {
 		Game.Current().setDifficulty(Difficulty.Normal);
 		CCTransitionScene board = Main.getTransisionFor(Board.scene());
 		CCDirector.sharedDirector().replaceScene(board);		
 	}
 	
-	public void showHelp() {
+	public void startHard(Object sender) {
+		Game.Current().setDifficulty(Difficulty.Hard);
+		CCTransitionScene board = Main.getTransisionFor(Board.scene());
+		CCDirector.sharedDirector().replaceScene(board);		
+	}
+	
+	public void showHelp(Object sender) {
 		CCTransitionScene helpScrn = Main.getTransisionFor(HelpScreen.scene(scene()));
 		CCDirector.sharedDirector().replaceScene(helpScrn);
 	}
 	
-	public void showHighscore() {
+	public void showHighscore(Object sender) {
 		CCTransitionScene scores = Main.getTransisionFor(Highscores.scene());
 		CCDirector.sharedDirector().replaceScene(scores);
 	}

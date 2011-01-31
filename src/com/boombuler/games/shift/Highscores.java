@@ -35,6 +35,8 @@ import com.boombuler.games.shift.render.TextEntry.TextBoxType;
 
 public class Highscores extends CCLayer implements KeyHandler{
 
+	private static final float smallHeaderHeigh = 35;
+	private static final float tableSpacing = 10;
 	public static CCScene scene() {
 		CCScene result = CCScene.node();
 		result.addChild(Background.node());
@@ -44,28 +46,45 @@ public class Highscores extends CCLayer implements KeyHandler{
 	
 	private Highscores() {
 		setIsTouchEnabled(true);
-		
+
 		CGSize s = CCDirector.sharedDirector().winSize();
 		float colWidth = (s.width / 4);
-		CCNode easy = buildTable(Difficulty.Easy, colWidth * 1);
-		CCNode normal = buildTable(Difficulty.Normal, colWidth * 3);
 
+		CCNode table = buildTables(colWidth);
+		
 		CCSprite head = CCSprite.sprite("highscores.png");
 		head.setScale(Block.SCALE * Main.SCALE);
 		final float headHeight = 63 * Block.SCALE;
 		
-		final float textHeight = (Settings.MAX_HIGHSCORE_COUNT * Label.DEFAULT);
-		float y = (s.height / 2) - (textHeight + headHeight)/2;
+		float totaltableSize = (Settings.MAX_HIGHSCORE_COUNT * Label.DEFAULT) + 
+								tableSpacing + (2*smallHeaderHeigh);
 		
-		easy.setPosition(0, y);
-		normal.setPosition(0, y);
 		
-		y = (s.height / 2) + (textHeight / 2) + headHeight;
+		
+		float y = (s.height / 2f) - (totaltableSize);
+		table.setPosition(0, y);
+		
+		y = (s.height / 2) + (totaltableSize - headHeight + tableSpacing);
 		
 		head.setPosition(s.width / 2, y);
 		this.addChild(head);
-	    this.addChild(easy);
-	    this.addChild(normal);
+	    this.addChild(table);
+	}
+	
+	private CCNode buildTables(float colWidth) {
+		CCNode result = CCNode.node();		
+		CCNode easy = buildTable(Difficulty.Easy, colWidth * 1);
+		CCNode normal = buildTable(Difficulty.Normal, colWidth * 3);
+		CCNode hard = buildTable(Difficulty.Hard, colWidth * 2);
+		
+		float tableSize = (Settings.MAX_HIGHSCORE_COUNT * Label.DEFAULT) + smallHeaderHeigh;
+		easy.setPosition(0, tableSize + smallHeaderHeigh + tableSpacing);
+		normal.setPosition(0, tableSize + smallHeaderHeigh + tableSpacing);
+		hard.setPosition(0, 0 + smallHeaderHeigh);
+		result.addChild(easy);
+		result.addChild(normal);
+		result.addChild(hard);
+		return result;
 	}
 	
 	private CCNode buildTable(Difficulty difficulty, float x) {

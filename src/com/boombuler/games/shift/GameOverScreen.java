@@ -27,6 +27,8 @@ import android.view.MotionEvent;
 import com.boombuler.games.shift.Game.Difficulty;
 import com.boombuler.games.shift.render.Background;
 import com.boombuler.games.shift.render.Block;
+import com.boombuler.games.shift.render.TextEntry;
+import com.boombuler.games.shift.render.TextEntry.TextBoxType;
 
 public class GameOverScreen extends CCLayer implements KeyHandler {
 
@@ -49,17 +51,13 @@ public class GameOverScreen extends CCLayer implements KeyHandler {
 		bg.setScale(Block.SCALE);
 		bg.setPosition(s.width/2, s.height/2);
 		this.addChild(bg);		
-		/*
-		final float gbHeight = 490 * Block.SCALE;
-		TextEntry score = new TextEntry(TextBoxType.Normal, 
-				String.format(MyResources.string(R.string.score), totalscore));
-		final float scoreHeight = 40 * Block.SCALE;
-		score.setScale(Block.SCALE);
-	
+				
+		TextEntry score = new TextEntry(TextBoxType.HighscoreEntry, 
+				String.format(MyResources.string(R.string.hscore), totalscore));
 		
-		float yPos = s.height / 2 - ((gbHeight + scoreHeight) / 2);
+		float yPos = s.height / 2 - 60;
 		score.setPosition(s.width / 2, yPos);
-		this.addChild(score); */
+		this.addChild(score); 
 	}
 	
 	

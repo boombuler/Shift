@@ -18,8 +18,10 @@
     <string name="app_name">Shift</string>
     <string name="score">Total Score: %d</string>
     <string name="lastmove">Last Move: %d</string>
+    <string name="hscore">Score: %d</string>
     <string name="easy">Easy</string>
     <string name="normal">Normal</string>
+    <string name="hard">Hard</string>
     <string name="highscore">Highscore</string>
     <string name="show_help">Help</string>
     <string name="quit">Quit</string>

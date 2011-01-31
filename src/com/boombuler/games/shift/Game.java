@@ -29,9 +29,9 @@ public class Game {
 
 	private final int MIN_DESTROY_COUNT = 3;
 	public static final int BOARD_SIZE = 6;
-	public static final int BOARD_CACHE_SIZE = 1;
+	public static final int BOARD_CACHE_SIZE = 2;
 	public static final int BOARD_SIZE_WITH_CACHE = BOARD_SIZE + 2 * BOARD_CACHE_SIZE;
-	private static final int[] CACHE_INDEXES = new int[] { 7, 0 };
+	private static final int[] CACHE_INDEXES = new int[] { 9, 0, 1, 8 };
 	
 	
 	public static final byte BLOCK_COLOR_COUNT_EASY = 4;
@@ -46,11 +46,28 @@ public class Game {
 	public static final byte BLOCK_TYPE_5 = 5;
 	public static final byte BLOCK_TYPE_6 = 6;
 	
+	public class BlockMove
+	{
+		public final int RowOld;
+		public final int RowNew;
+		public final int ColOld;
+		public final int ColNew;
+		
+		public BlockMove(int rowOld, int colOld, int rowNew, int colNew)
+		{
+			RowOld = rowOld;
+			ColOld = colOld;
+			RowNew = rowNew;
+			ColNew = colNew;
+		}
+		
+	}
+	
 	public interface BlockChangeListener {
 		void Cleared();
 		void EndMoving();
 		void BlockAdded(int row, int col, byte blockType);
-		void BlockMoved(int rowOld, int colOld, int rowNew, int colNew);
+		void BlocksMoved(List<BlockMove> moves);
 		void BlockRemoved(int row, int col);
 	}
 	
@@ -162,34 +179,35 @@ public class Game {
 	}
 	
 	public void Move(MoveDirection direction) {
-		
+		final List<BlockMove> moves = new LinkedList<BlockMove>();
 		boolean anyMoved = false;
 		if (direction.equals(MoveDirection.Up)) {
 			for(int row = BOARD_SIZE; row >= 0; row--) {
 				for(int col = BOARD_CACHE_SIZE; col < BOARD_SIZE + BOARD_CACHE_SIZE; col++) {
-					anyMoved |= DoMoveBlock(row, col, row+1, col);
+					anyMoved |= DoMoveBlock(moves, row, col, row+1, col);
 				}
 			}
 		} else if (direction.equals(MoveDirection.Down)) {
 			for(int row = BOARD_CACHE_SIZE; row < BOARD_SIZE_WITH_CACHE; row++) {
 				for(int col = BOARD_CACHE_SIZE; col < BOARD_SIZE + BOARD_CACHE_SIZE; col++) {
-					anyMoved |= DoMoveBlock(row, col, row-1, col);
+					anyMoved |= DoMoveBlock(moves, row, col, row-1, col);
 				}
 			}
 		} else if (direction.equals(MoveDirection.Left)) {
 			for(int col = BOARD_CACHE_SIZE; col < BOARD_SIZE_WITH_CACHE; col++) {
 				for(int row = BOARD_CACHE_SIZE; row < BOARD_SIZE + BOARD_CACHE_SIZE; row++) {
-					anyMoved |= DoMoveBlock(row, col, row, col-1);
+					anyMoved |= DoMoveBlock(moves, row, col, row, col-1);
 				}
 			}
 		} else if (direction.equals(MoveDirection.Right)) {
 			for(int col = BOARD_SIZE; col >= 0; col--) {
 				for(int row = BOARD_CACHE_SIZE; row < BOARD_SIZE + BOARD_CACHE_SIZE; row++) {
-					anyMoved |= DoMoveBlock(row, col, row, col+1);
+					anyMoved |= DoMoveBlock(moves, row, col, row, col+1);
 				}
 			}
 		}
-		
+		if (mBlockListener != null)
+			mBlockListener.BlocksMoved(moves);
 		FillMissingCache();
 		if (mBlockListener != null) {
 			mBlockListener.EndMoving();
@@ -278,13 +296,12 @@ public class Game {
 		return true;
 	}
 	
-	private boolean DoMoveBlock(int rowOld, int colOld, int rowNew, int colNew) {
+	private boolean DoMoveBlock(List<BlockMove> moves, int rowOld, int colOld, int rowNew, int colNew) {
 		if (mState.Board[rowNew][colNew] != BLOCK_TYPE_FREE)
 			return false;
 		mState.Board[rowNew][colNew] = mState.Board[rowOld][colOld];
 		mState.Board[rowOld][colOld] = BLOCK_TYPE_FREE;
-		if (mBlockListener != null)
-			mBlockListener.BlockMoved(rowOld, colOld, rowNew, colNew);
+		moves.add(new BlockMove(rowOld, colOld, rowNew, colNew));
 		return true;
 	}
 	

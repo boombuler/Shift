@@ -15,8 +15,12 @@
  */
 package com.boombuler.games.shift;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import javax.microedition.khronos.opengles.GL10;
 
+import org.cocos2d.actions.base.CCFiniteTimeAction;
 import org.cocos2d.actions.instant.CCCallFunc;
 import org.cocos2d.layers.CCLayer;
 import org.cocos2d.layers.CCScene;
@@ -27,6 +31,7 @@ import org.cocos2d.transitions.CCTransitionScene;
 import org.cocos2d.types.CGPoint;
 import org.cocos2d.types.CGSize;
 
+import com.boombuler.games.shift.Game.BlockMove;
 import com.boombuler.games.shift.render.Background;
 import com.boombuler.games.shift.render.Block;
 import com.boombuler.games.shift.render.ScoreLabel;
@@ -37,9 +42,12 @@ import android.view.MotionEvent;
 
 public class Board extends CCLayer implements Game.BlockChangeListener, KeyHandler {
 
+	public static boolean DEBUG = false;
+	
 	public static final float ANIMATION_TIME = 0.3f;
 	private static CCScene fCurrent = null;
 	private static Board fCurrentBoard = null;
+	
 	
 	public static CCScene scene() {
 		if (Settings.Current().getHasReadManual())
@@ -64,7 +72,8 @@ public class Board extends CCLayer implements Game.BlockChangeListener, KeyHandl
 			fCurrent.addChild(getCenterScaledImg("gameboardbottom.png"));
 			
 			fCurrent.addChild(fCurrentBoard);
-			fCurrent.addChild(getCenterScaledImg("gameboardtop.png"));
+			if (!DEBUG)
+				fCurrent.addChild(getCenterScaledImg("gameboardtop.png"));
 			fCurrent.addChild(new ScoreLabel());			
 		}
 		Game.Current().setBlockChangedListener(fCurrentBoard);
@@ -76,7 +85,8 @@ public class Board extends CCLayer implements Game.BlockChangeListener, KeyHandl
 		setScale(Main.SCALE);
 		setAnchorPoint(0f, 0f);
 		CGSize s = CCDirector.sharedDirector().winSize();
-		float boardSize = Game.BOARD_SIZE_WITH_CACHE * Block.BLOCK_SIZE * Main.SCALE;
+		float boardSize = (Game.BOARD_SIZE_WITH_CACHE) * 
+		                  Block.BLOCK_SIZE * Main.SCALE;
 		setPosition(CGPoint.make((s.width - boardSize) / 2, (s.height - boardSize) / 2));
 	}
 
@@ -134,15 +144,21 @@ public class Board extends CCLayer implements Game.BlockChangeListener, KeyHandl
 	
 	@Override
 	public void visit(GL10 gl) {
-		gl.glEnable(GL10.GL_SCISSOR_TEST);
-		int boardsize = (int)(Game.BOARD_SIZE * Block.BLOCK_SIZE * Main.SCALE);
-		CGSize size = CCDirector.sharedDirector().winSize();
-		int x = (int)(size.width - boardsize) / 2;
-		int y = (int)(size.height - boardsize) / 2;
-		
-		gl.glScissor(x, y, boardsize, boardsize);
-		super.visit(gl);
-		gl.glDisable(GL10.GL_SCISSOR_TEST);
+		if (!DEBUG) {
+			gl.glEnable(GL10.GL_SCISSOR_TEST);
+			int boardsize = (int)(Game.BOARD_SIZE * Block.BLOCK_SIZE * Main.SCALE);
+			CGSize size = CCDirector.sharedDirector().winSize();
+			int x = (int)(size.width - boardsize) / 2;
+			int y = (int)(size.height - boardsize) / 2;
+			
+			gl.glScissor(x, y, boardsize, boardsize);
+			
+			super.visit(gl);
+			
+			gl.glDisable(GL10.GL_SCISSOR_TEST);
+		}
+		else
+			super.visit(gl);
 	}
 
 	@Override
@@ -159,20 +175,27 @@ public class Board extends CCLayer implements Game.BlockChangeListener, KeyHandl
 	}
 	
 	@Override
-	public void BlockMoved(int rowOld, int colOld, int rowNew, int colNew) {
-		Block b = FindBlock(rowOld, colOld);
-		if (b != null)
-			b.MoveTo(rowNew, colNew);
+	public void BlocksMoved(List<Game.BlockMove> moves) {
+		for(BlockMove bm : moves) {
+			Block b = FindBlock(bm.RowOld, bm.ColOld);
+			if (b != null) {
+				CCFiniteTimeAction ac = b.MoveTo(bm.RowNew, bm.ColNew);
+				if (ac != null)
+					b.runAction(ac);
+			}			
+		}
 	}
 	
 	@Override
 	public void EndMoving() {
-		this.schedule("finishmoving", ANIMATION_TIME);
+		this.schedule("finishmoving");
 	}
 	
-	public void finishmoving(float dt) {
-		this.unschedule("finishmoving");	
-		Game.Current().AnimationsComplete();
+	public void finishmoving(float dt) {		
+		if (!this.IsAnimating()) {
+			this.unschedule("finishmoving");
+			Game.Current().AnimationsComplete();
+		}
 	}
 	
 	@Override

@@ -67,15 +67,22 @@ public class Main extends Activity {
     
     @Override
     public boolean dispatchKeyEvent(KeyEvent event) {
-    	CCScene running = CCDirector.sharedDirector().getRunningScene();
-    	if (running != null) {
-	    	for (CCNode node : running.getChildren()) {
-	    		if (node instanceof KeyHandler)
-	    			if (((KeyHandler)node).HandleKeyEvent(event))
-	    				return true;
-	    	}
-    	}
-    	return super.dispatchKeyEvent(event);
+		try
+		{
+			CCScene running = CCDirector.sharedDirector().getRunningScene();
+			if (running != null) {
+				for (CCNode node : running.getChildren()) {
+					if (node instanceof KeyHandler)
+						if (((KeyHandler)node).HandleKeyEvent(event))
+							return true;
+				}
+			}
+		}
+		catch(Exception e)
+		{
+			// Could not dispatch Key event...
+		}
+    	return super.dispatchKeyEvent(event);		
     }
     
     

@@ -106,6 +106,8 @@ public class Board extends CCLayer implements Game.BlockChangeListener, KeyHandl
 	}
 	
 	public float getTouchDistance(MotionEvent ev) {
+		if (mTouchStart == null)
+			return 0f;
 		float wid = Math.abs(ev.getX() - mTouchStart.x);
 		float hei = Math.abs(ev.getY() - mTouchStart.y);
 		

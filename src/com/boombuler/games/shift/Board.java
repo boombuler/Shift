@@ -15,7 +15,6 @@
  */
 package com.boombuler.games.shift;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import javax.microedition.khronos.opengles.GL10;
@@ -163,20 +162,17 @@ public class Board extends CCLayer implements Game.BlockChangeListener, KeyHandl
 			super.visit(gl);
 	}
 
-	@Override
 	public void BlockAdded(int row, int col, byte blockType) {
 		Block sprite = new Block(row, col, blockType);
 		this.addChild(sprite);
 	}
 
-
-	@Override
+	
 	public void Cleared() {
 		if (this.children_ != null)
 			this.children_.clear();
 	}
 	
-	@Override
 	public void BlocksMoved(List<Game.BlockMove> moves) {
 		for(BlockMove bm : moves) {
 			Block b = FindBlock(bm.RowOld, bm.ColOld);
@@ -188,7 +184,6 @@ public class Board extends CCLayer implements Game.BlockChangeListener, KeyHandl
 		}
 	}
 	
-	@Override
 	public void EndMoving() {
 		this.schedule("finishmoving");
 	}
@@ -200,7 +195,6 @@ public class Board extends CCLayer implements Game.BlockChangeListener, KeyHandl
 		}
 	}
 	
-	@Override
 	public void BlockRemoved(int row, int col) {
 		Block b = FindBlock(row, col);
 		if (b != null) {
@@ -238,8 +232,7 @@ public class Board extends CCLayer implements Game.BlockChangeListener, KeyHandl
 		}
 		return false;
 	}
-
-	@Override
+	
 	public boolean HandleKeyEvent(KeyEvent event) {
 		if (event.getAction() == KeyEvent.ACTION_UP && !IsAnimating()) {
 			switch(event.getKeyCode()) {

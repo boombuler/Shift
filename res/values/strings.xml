@@ -25,6 +25,7 @@
     <string name="highscore">Highscore</string>
     <string name="show_help">Help</string>
     <string name="quit">Quit</string>
+    <string name="about">About</string>
     
     <string-array name="helpscreen">
     <item> </item>

@@ -75,7 +75,6 @@ public class GameOverScreen extends CCLayer implements KeyHandler {
 		);		
 	}
 	
-	@Override
 	public boolean HandleKeyEvent(KeyEvent event) {
 		done();
 		return false;

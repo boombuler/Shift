@@ -29,19 +29,19 @@ import com.boombuler.games.shift.render.Background;
 import com.boombuler.games.shift.render.Block;
 import com.boombuler.games.shift.render.Label;
 
-public class HelpScreen extends CCLayer  {
+public class AboutScreen extends CCLayer  {
 
 	public static CCScene scene(CCScene next) {
 		CCScene result = CCScene.node();
 		result.addChild(Background.node());
 		
 		CGSize s = CCDirector.sharedDirector().winSize();
-		CCSprite bg = CCSprite.sprite("help.png");
+		CCSprite bg = CCSprite.sprite("about.png");
 		bg.setScale(Block.SCALE*Main.SCALE);
 		bg.setPosition(s.width / 2, s.height / 2);
 		result.addChild(bg);
 		
-		result.addChild((new HelpScreen(next)).getScaleLayer());
+		result.addChild((new AboutScreen(next)).getScaleLayer());
 		return result;
 	}
 	
@@ -49,17 +49,17 @@ public class HelpScreen extends CCLayer  {
 	
 	class ScaleLayer extends CCLayer implements KeyHandler{
 		public ScaleLayer() {
-			addChild(HelpScreen.this);
+			addChild(AboutScreen.this);
 			setScale(Main.SCALE*Block.SCALE);			
 		}
 		
 		public boolean HandleKeyEvent(KeyEvent event) {
-			HelpScreen.this.done();
+			AboutScreen.this.done();
 			return false;
 		}
 	}
 		
-	public HelpScreen(CCScene next) {
+	public AboutScreen(CCScene next) {
 		mNext = next;
 		CGSize s = CCDirector.sharedDirector().winSize();
 		String[] text = MyResources.stringArray(R.array.helpscreen);
@@ -84,8 +84,7 @@ public class HelpScreen extends CCLayer  {
 		return super.ccTouchesEnded(event);
 	}
 	
-	void done() {
-		Settings.Current().setHasReadManual(true);
+	void done() {		
 		CCTransitionScene transition = Main.getTransisionFor(mNext);
 		CCDirector.sharedDirector().replaceScene(transition);
 		mNext = null;

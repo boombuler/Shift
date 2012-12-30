@@ -95,7 +95,7 @@ public class Highscores extends CCLayer implements KeyHandler{
 		CCSprite header = CCSprite.sprite( 
 				difficulty == Difficulty.Easy ? 
 						"easy.png":
-						"normal.png");		
+							(difficulty == Difficulty.Normal ? "normal.png" : "hard.png"));		
 		header.setPosition(x, pos);
 		pos -= 35;
 		result.addChild(header);
@@ -123,7 +123,6 @@ public class Highscores extends CCLayer implements KeyHandler{
 		CCDirector.sharedDirector().replaceScene(transition);
 	}
 
-	@Override
 	public boolean HandleKeyEvent(KeyEvent event) {
 		done();
 		return false;

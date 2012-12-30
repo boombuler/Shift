@@ -51,7 +51,6 @@ public class ScoreLabel extends CCNode implements Game.ScoreChangedListener{
 		Game.Current().setScoreChangedListener(this);
 	}
 
-	@Override
 	public void OnScoreChanged(int lastMove, long totalScore) {
 		String txtTotal = String.format(MyResources.string(R.string.score), totalScore);
 		String txtLM = String.format(MyResources.string(R.string.lastmove), lastMove);

@@ -104,7 +104,6 @@ public class Settings implements Comparator<Long>{
 		return true;
 	}
 
-	@Override
 	public int compare(Long object1, Long object2) {
 		return object2.compareTo(object1);
 	}

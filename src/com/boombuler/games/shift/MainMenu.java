@@ -60,6 +60,7 @@ public class MainMenu extends CCLayer implements KeyHandler {
 		CCMenuItem hard = getTextItem(R.string.hard, "startHard");
 		CCMenuItem quit = getTextItem(R.string.quit, "onQuit");
 		CCMenuItem help = getTextItem(R.string.show_help, "showHelp");
+		CCMenuItem help = getTextItem(R.string.about, "showAbout");
 		CCMenuItem highscore = getTextItem(R.string.highscore, "showHighscore");
 		
         CCMenu result = CCMenu.menu(easy, normal, hard, highscore, help, quit);
@@ -119,12 +120,16 @@ public class MainMenu extends CCLayer implements KeyHandler {
 		CCDirector.sharedDirector().replaceScene(helpScrn);
 	}
 	
+	public void showAbout(Object sender) {
+		CCTransitionScene aboutScrn = Main.getTransisionFor(AboutScreen.scene(scene()));
+		CCDirector.sharedDirector().replaceScene(aboutScrn);
+	}
+	
 	public void showHighscore(Object sender) {
 		CCTransitionScene scores = Main.getTransisionFor(Highscores.scene());
 		CCDirector.sharedDirector().replaceScene(scores);
 	}
 
-	@Override
 	public boolean HandleKeyEvent(KeyEvent event) {
 		if (event.getAction() == KeyEvent.ACTION_UP) {
 			switch(event.getKeyCode()) {

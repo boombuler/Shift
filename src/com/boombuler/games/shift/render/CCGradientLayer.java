@@ -92,12 +92,10 @@ public class CCGradientLayer extends CCLayer
 
     // Size protocol
 
-    @Override
     public float getWidth() {
         return squareVertices_.get(2);
     }
 
-    @Override
     public float getHeight() {
         return squareVertices_.get(5);
     }
